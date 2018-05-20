@@ -1,0 +1,26 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "dist/functions",
+    "predeploy": [
+      "yarn functions-copy-deps",
+      "yarn functions-lint",
+      "yarn functions-build",
+      "yarn build-app"
+    ]
+  },
+  "hosting": {
+    "public": "dist/public",
+    "rewrites": [
+      {
+        "source": "**/**",
+        "function": "nextApp"
+      }
+    ],
+    "predeploy": "npm run build-public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}
