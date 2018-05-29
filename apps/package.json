@@ -1,0 +1,38 @@
+{
+  "name": "retro",
+  "version": "1.0.0",
+  "repository": "https://github.com/sampsonjoliver/retro.git",
+  "author": "sampsonjoliver <sampsonjoliver@outlook.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next app/",
+    "serve": "firebase serve",
+    "shell": "firebase functions:shell",
+    "deploy": "firebase deploy --only functions:app",
+    "deploy-hosting": "firebase deploy --only hosting",
+    "lint-app": "tslint --project app",
+    "lint-server": "tslint --project server",
+    "build-app": "next build app",
+    "build-server": "tsc --project server",
+    "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"lib\" -C"
+  },
+  "dependencies": {
+    "@zeit/next-typescript": "^1.0.0",
+    "firebase-admin": "~5.12.1",
+    "firebase-functions": "^1.0.1",
+    "next": "^6.0.3",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  },
+  "devDependencies": {
+    "@types/next": "^2.4.10",
+    "@types/react": "^16.3.14",
+    "cpx": "^1.5.0",
+    "firebase-tools": "^3.18.5",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^2.8.3"
+  }
+}

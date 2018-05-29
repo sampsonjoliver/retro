@@ -6,39 +6,14 @@
   "author": "sampsonjoliver <sampsonjoliver@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "next \"src/app\"",
-    "serve": "firebase serve",
-    "shell": "firebase functions:shell",
-    "deploy": "firebase deploy",
-    "build-public": "cpx \"src/public/**/*.*\" \"dist/public\" -C",
-    "build-functions": "babel \"src/functions\" --out-dir \"dist/functions\"",
-    "build-app": "next build \"src/app\"",
-    "functions-lint": "tslint --project src/functions",
-    "functions-build": "tsc --project src/functions",
-    "functions-serve": "npm run build && firebase serve --only functions",
-    "functions-shell": "npm run build && firebase functions:shell",
-    "functions-start": "npm run shell",
-    "functions-deploy": "firebase deploy --only functions",
-    "functions-logs": "firebase functions:log",
-    "functions-copy-deps":
-      "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C"
   },
   "dependencies": {
-    "@zeit/next-typescript": "^1.0.0",
-    "firebase-admin": "~5.12.1",
-    "firebase-functions": "^1.0.1",
-    "next": "^6.0.3",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
   },
   "devDependencies": {
-    "@types/next": "^2.4.10",
-    "@types/react": "^16.3.14",
     "cpx": "1.5.0",
     "firebase-tools": "3.18.4",
+    "lerna": "^2.11.0",
     "prettier": "1.12.1",
-    "rimraf": "2.6.2",
-    "tslint": "^5.8.0",
-    "typescript": "^2.5.3"
+    "rimraf": "2.6.2"
   }
 }

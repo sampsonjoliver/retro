@@ -1,6 +1,6 @@
 {
   "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
-  "rulesDirectory": ["./node_modules/tslint-react/rules"],
+  "rulesDirectory": ["../node_modules/tslint-react/rules"],
   "rules": {
     "interface-name": [true, "never-prefix"],
     "jsx-boolean-value": false,
@@ -30,7 +30,6 @@
       "allow-leading-underscore",
       "allow-pascal-case"
     ],
-    "max-classes-per-file": 4,
-    "no-any": false
+    "max-classes-per-file": 4
   }
 }

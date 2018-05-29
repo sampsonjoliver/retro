@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default ({ pathname }: { pathname?: any }) => (
+export default ({ pathname }: { pathname?: string }) => (
   <header>
     <Link href="/">
       <a className={pathname === '/' ? 'is-active' : ''}>Home</a>

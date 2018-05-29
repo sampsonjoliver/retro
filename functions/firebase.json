@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "source": "lib",
+    "predeploy": [
+      "yarn lint",
+      "yarn build",
+      "yarn copy-deps"
+    ]
+  }
+}

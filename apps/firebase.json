@@ -1,0 +1,22 @@
+{
+  "functions": {
+    "source": "lib",
+    "predeploy": [
+      "yarn lint-server",
+      "yarn lint-app",
+      "yarn build-server",
+      "yarn build-app",
+      "yarn copy-deps"
+    ]
+  },
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      {
+        "source": "**/**",
+        "function": "app-next"
+      }
+    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}

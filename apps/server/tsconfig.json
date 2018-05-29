@@ -3,11 +3,10 @@
     "lib": ["es6"],
     "module": "commonjs",
     "noImplicitReturns": true,
-    "outDir": "../../dist/functions",
+    "outDir": "../lib",
     "sourceMap": true,
     "target": "es6",
-    "baseUrl": "./src"
+    "baseUrl": "."
   },
-  "compileOnSave": true,
-  "include": ["src"]
+  "compileOnSave": true
 }

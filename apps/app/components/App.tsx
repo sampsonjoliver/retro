@@ -1,6 +1,6 @@
 import Header from './Header';
 
-const App = ({ children }: { children?: any }) => (
+const App = ({ children }) => (
   <main>
     <Header />
     {children}
