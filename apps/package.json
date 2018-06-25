@@ -18,9 +18,12 @@
     "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"lib\" -C"
   },
   "dependencies": {
+    "@material-ui/core": "^1.2.0",
     "@zeit/next-typescript": "^1.0.0",
+    "classnames": "^2.2.6",
     "firebase-admin": "~5.12.1",
     "firebase-functions": "^1.0.1",
+    "mobx": "^4.3.1",
     "next": "^6.0.3",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
