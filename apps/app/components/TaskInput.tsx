@@ -1,6 +1,5 @@
 import {
   TextField,
-  IconButton,
   Icon,
   Paper,
   withStyles,

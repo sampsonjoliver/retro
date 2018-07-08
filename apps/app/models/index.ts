@@ -4,3 +4,8 @@ interface Sprint {
   startDate: Date;
   endDate: Date;
 }
+
+interface UserInfo {
+  currentSprintId: string;
+  preferences: object;
+}

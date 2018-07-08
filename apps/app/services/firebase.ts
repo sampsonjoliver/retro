@@ -10,11 +10,6 @@ const config = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID
 };
 
-console.log(
-  'process.env.REACT_APP_FIREBASE_PROJECT_ID',
-  process.env.REACT_APP_FIREBASE_PROJECT_ID
-);
-
 const initializeApp = () => {
   try {
     firebase.initializeApp(config);
@@ -25,7 +20,9 @@ const initializeApp = () => {
       .then(() => console.log('Firestore persistence enabled'))
       .catch(error => console.log('Firestore persistence unavailable', error));
   } catch (err) {
-    console.log(err);
+    if (err.code !== 'app/duplicate-app') {
+      console.log(err);
+    }
   }
 };
 
