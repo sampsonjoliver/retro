@@ -14,6 +14,14 @@ import { AppDrawer } from './Drawer';
 import { AppDrawerMenu } from './AppDrawerMenu';
 import { drawerWidth } from '../consts';
 
+import { Provider as MobxProvider } from 'mobx-react';
+import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
+
+import firebase from '../services/firebase';
+firebase.initializeApp();
+
+const observableFactory = new FirestoreObservableFactory('sovereignStore');
+
 const styles = theme =>
   createStyles({
     root: {
@@ -76,33 +84,35 @@ class AppComponent extends React.Component<Props, State> {
 
     return (
       <main>
-        <div className={classes.root}>
-          <AppBar className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={this.handleDrawerToggle}
-                className={classes.menuButton}
-              >
-                <Icon>menu</Icon>
-              </IconButton>
-              <Typography variant="title" color="inherit" noWrap>
-                {this.props.title}
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <AppDrawer
-            mobileOpen={this.state.mobileOpen}
-            onClose={() => this.setState({ mobileOpen: false })}
-          >
-            <AppDrawerMenu />
-          </AppDrawer>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            {this.props.children}
-          </main>
-        </div>
+        <MobxProvider AutoObservableFactory={observableFactory}>
+          <div className={classes.root}>
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={this.handleDrawerToggle}
+                  className={classes.menuButton}
+                >
+                  <Icon>menu</Icon>
+                </IconButton>
+                <Typography variant="title" color="inherit" noWrap>
+                  {this.props.title}
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <AppDrawer
+              mobileOpen={this.state.mobileOpen}
+              onClose={() => this.setState({ mobileOpen: false })}
+            >
+              <AppDrawerMenu />
+            </AppDrawer>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              {this.props.children}
+            </main>
+          </div>
+        </MobxProvider>
       </main>
     );
   }

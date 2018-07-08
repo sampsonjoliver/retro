@@ -2,21 +2,20 @@ import * as React from 'react';
 import {
   Divider,
   Avatar,
-  Icon,
   List,
   ListItem,
   ListItemAvatar,
-  ListItemIcon,
-  ListItemText
+  ListItemText,
+  CircularProgress
 } from '@material-ui/core';
 import Link from 'next/link';
+import {
+  FirestoreQueryComponent,
+  FirestoreAutoObservable
+} from 'react-firestore-mobx-bindings';
+import { DrawerItem, UserDrawerItem } from './DrawerItem';
 
 const styles: { [key: string]: React.CSSProperties } = {
-  avatar: {
-    margin: 10,
-    color: '#fff',
-    backgroundColor: '#18c'
-  },
   drawer: {
     height: '100%',
     display: 'flex',
@@ -26,63 +25,63 @@ const styles: { [key: string]: React.CSSProperties } = {
 };
 
 export const AppDrawerMenu = () => {
+  const selector = (firestore: firebase.firestore.Firestore) => ({
+    sprints: firestore.collection('sprints').orderBy('endDate')
+  });
+
   return (
     <List style={styles.drawer}>
-      <Link href={{ pathname: '/user' }}>
-        <ListItem button>
-          <ListItemAvatar>
-            <Avatar style={styles.avatar} alt="Your photo" />
-          </ListItemAvatar>
-          <ListItemText primary="You" />
-        </ListItem>
-      </Link>
-      <Link href={{ pathname: '/' }}>
-        <ListItem button>
-          <ListItemIcon>
-            <Icon>wb_sunny</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Current Sprint" />
-        </ListItem>
-      </Link>
-      <Divider />
-      <Link href={{ pathname: '/sprint', query: { id: 'current' } }}>
-        <ListItem button>
-          <ListItemIcon>
-            <Icon>calendar_view_day</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Sprint 1" />
-        </ListItem>
-      </Link>
-      <ListItem button>
-        <ListItemIcon>
-          <Icon>calendar_view_day</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Sprint 1" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <Icon>add</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Rollover Sprint" />
-      </ListItem>
+      <UserDrawerItem linkTo={{ pathname: '/user' }} text="You" />
+
+      <FirestoreQueryComponent selector={selector}>
+        {({ sprints }: { sprints: FirestoreAutoObservable<Sprint[]> }) => {
+          if (sprints.data) {
+            const currentSprint =
+              sprints.data && sprints.data[sprints.data.length - 1];
+
+            const listItems =
+              sprints.data &&
+              sprints.data.slice(0, sprints.data.length - 1).map(sprint => {
+                return (
+                  <DrawerItem
+                    key={sprint.id}
+                    text={sprint.name}
+                    icon="calendar_view_day"
+                    linkTo={{
+                      pathname: '/sprint',
+                      query: { id: currentSprint.id }
+                    }}
+                  />
+                );
+              });
+
+            return (
+              <>
+                <DrawerItem
+                  text={`Current: ${currentSprint.name}`}
+                  icon="wb_sunny"
+                  linkTo={{
+                    pathname: '/sprint',
+                    query: { id: currentSprint.id }
+                  }}
+                />
+                <Divider />
+                {listItems}
+              </>
+            );
+          } else {
+            return <CircularProgress />;
+          }
+        }}
+      </FirestoreQueryComponent>
       <Divider style={{ flex: 1, backgroundColor: '#ffffff' }} />
       <Divider />
-      <Link href={{ pathname: '/settings' }}>
-        <ListItem button>
-          <ListItemIcon>
-            <Icon>settings</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </ListItem>
-      </Link>
-      <Link href={{ pathname: '/about' }}>
-        <ListItem button>
-          <ListItemIcon>
-            <Icon>help</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Help" />
-        </ListItem>
-      </Link>
+      <DrawerItem
+        text="Settings"
+        icon="settings"
+        linkTo={{ pathname: '/setting' }}
+      />
+      <DrawerItem text="Help" icon="help" linkTo={{ pathname: '/about' }} />
     </List>
   );
 };
