@@ -14,9 +14,10 @@
       "variables-before-functions",
       "statics-first"
     ],
-    "no-any": true,
+    "no-any": false,
     "no-console": false,
     "no-duplicate-variable": true,
+    "no-duplicate-imports": false,
     "no-implicit-dependencies": false,
     "no-submodule-imports": false,
     "no-switch-case-fall-through": true,
