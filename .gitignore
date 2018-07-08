@@ -34,3 +34,5 @@ node_modules
 # Build folders
 lib
 dist/
+
+.env
