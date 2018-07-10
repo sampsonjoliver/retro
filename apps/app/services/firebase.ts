@@ -1,5 +1,6 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -14,16 +15,19 @@ const initializeApp = () => {
   try {
     firebase.initializeApp(config);
 
-    firebase
-      .firestore()
+    const firestore = firebase.firestore();
+
+    firestore.settings({ timestampsInSnapshots: true });
+
+    firestore
       .enablePersistence()
       .then(() => console.log('Firestore persistence enabled'))
       .catch(error => console.log('Firestore persistence unavailable', error));
   } catch (err) {
     if (err.code !== 'app/duplicate-app') {
-      console.log(err);
+      console.error(err);
     }
   }
 };
 
-export default { ...firebase, initializeApp };
+export { initializeApp };

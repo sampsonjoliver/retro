@@ -1,17 +1,32 @@
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import getPageContext from './getPageContext';
+import DocumentComponent, { Context } from 'next/Document';
+import getPageContext, { PageContext } from './getPageContext';
 
-function withRoot(Component) {
-  class WithRoot extends React.Component {
-    constructor(props) {
+interface Props {
+  pageContext?: PageContext;
+}
+
+function withRoot(Component: typeof DocumentComponent | any) {
+  class WithRoot extends React.Component<Props> {
+    public pageContext: PageContext;
+
+    public static async getInitialProps(ctx: Context) {
+      if (Component.getInitialProps) {
+        return Component.getInitialProps(ctx);
+      }
+
+      return {};
+    }
+
+    constructor(props: Props) {
       super(props);
 
       this.pageContext = this.props.pageContext || getPageContext();
     }
 
-    componentDidMount() {
+    public componentDidMount() {
       // Remove the server-side injected CSS.
       const jssStyles = document.querySelector('#jss-server-side');
       if (jssStyles && jssStyles.parentNode) {
@@ -19,9 +34,7 @@ function withRoot(Component) {
       }
     }
 
-    pageContext = null;
-
-    render() {
+    public render() {
       // MuiThemeProvider makes the theme available down the React tree thanks to React context.
       return (
         <MuiThemeProvider
@@ -36,15 +49,7 @@ function withRoot(Component) {
     }
   }
 
-  WithRoot.getInitialProps = ctx => {
-    if (Component.getInitialProps) {
-      return Component.getInitialProps(ctx);
-    }
-
-    return {};
-  };
-
   return WithRoot;
 }
 
-export default withRoot;
+export { withRoot };

@@ -1,7 +1,8 @@
-import { SheetsRegistry } from 'jss';
+import { SheetsRegistry, GenerateClassName } from 'jss';
 import {
   createMuiTheme,
-  createGenerateClassName
+  createGenerateClassName,
+  Theme
 } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
@@ -10,7 +11,14 @@ import green from '@material-ui/core/colors/green';
 // It's optional.
 const theme = createMuiTheme({});
 
-function createPageContext() {
+export interface PageContext {
+  theme: Theme;
+  sheetsManager: Map<any, any>;
+  sheetsRegistry: SheetsRegistry;
+  generateClassName: GenerateClassName<any>;
+}
+
+function createPageContext(): PageContext {
   return {
     theme,
     // This is needed in order to deduplicate the injection of CSS in the page.
@@ -22,17 +30,20 @@ function createPageContext() {
   };
 }
 
-export default function getPageContext() {
+export default function getPageContext(): PageContext {
+  const pageProcess = process as any;
+  const pageGlobal = global as any;
+
   // Make sure to create a new context for every server-side request so that data
   // isn't shared between connections (which would be bad).
-  if (!process.browser) {
+  if (!pageProcess.browser) {
     return createPageContext();
   }
 
   // Reuse context on the client-side.
-  if (!global.__INIT_MATERIAL_UI__) {
-    global.__INIT_MATERIAL_UI__ = createPageContext();
+  if (!pageGlobal.__INIT_MATERIAL_UI__) {
+    pageGlobal.__INIT_MATERIAL_UI__ = createPageContext();
   }
 
-  return global.__INIT_MATERIAL_UI__;
+  return pageGlobal.__INIT_MATERIAL_UI__;
 }

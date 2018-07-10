@@ -1,9 +1,13 @@
-import firebase from './firebase';
-import { decorate, observable, action, autorun, reaction, when } from 'mobx';
+import firebase from 'firebase';
+import { observable, action, reaction } from 'mobx';
+
+let store: AuthStore | null = null;
 
 class AuthStore {
-  public user: firebase.User | null = null;
-  public userInfo: UserInfo | null = null;
+  @observable public user: firebase.User | null = null;
+  @observable public userInfo: UserInfo | null = null;
+
+  private userListener?: () => void;
   private userInfoListener?: () => void;
 
   private auth = firebase.auth();
@@ -11,17 +15,13 @@ class AuthStore {
 
   public constructor() {
     reaction(() => this.user, user => this.watchUserInfo(user));
-    when(() => this.user != null, () => this.watchUserInfo(this.user));
-    this.auth.onAuthStateChanged(user => this.setAuthState(user));
+    this.userListener = this.auth.onAuthStateChanged(user =>
+      this.setUser(user)
+    );
   }
 
   public signInAnonymously() {
     this.auth.signInAnonymously();
-  }
-
-  public signInWithFacebook() {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    this.auth.signInWithRedirect(provider);
   }
 
   public signInWithGoogle() {
@@ -29,11 +29,17 @@ class AuthStore {
     this.auth.signInWithRedirect(provider);
   }
 
-  public setAuthState(user: firebase.User | null) {
+  public signOut() {
+    this.auth.signOut();
+  }
+
+  @action
+  public setUser(user: firebase.User | null) {
     console.log(`Signed in as ${(user || { uid: 'null' }).uid}`);
     this.user = user;
   }
 
+  @action
   public setUserInfo(userInfo: UserInfo | null) {
     console.log(`Stored user info ${JSON.stringify(userInfo)}`);
     this.userInfo = userInfo;
@@ -63,11 +69,11 @@ class AuthStore {
   }
 }
 
-decorate(AuthStore, {
-  user: observable,
-  userInfo: observable,
-  setAuthState: action,
-  setUserInfo: action
-});
+function initStore() {
+  if (store === null) {
+    store = new AuthStore();
+  }
+  return store;
+}
 
-export { AuthStore };
+export { AuthStore, initStore };

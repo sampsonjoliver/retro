@@ -6,27 +6,17 @@ import {
   Typography,
   IconButton,
   AppBar,
-  Toolbar
+  Toolbar,
+  Button
 } from '@material-ui/core';
 
-import withRoot from '../withRoot';
+import { withRoot } from '../utils/withRoot';
 import { AppDrawer } from './Drawer';
 import { AppDrawerMenu } from './AppDrawerMenu';
 import { drawerWidth } from '../consts';
 
-import { Provider as MobxProvider } from 'mobx-react';
-import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
-
-import firebase from '../services/firebase';
-import { AuthStore } from '../services/auth';
-firebase.initializeApp();
-
-import { useStaticRendering } from 'mobx-react';
 import { WithAuth } from './WithAuth';
-useStaticRendering(true);
-
-const observableFactory = new FirestoreObservableFactory('sovereignStore');
-const authService = new AuthStore();
+import AuthStateAvatar from './Avatar';
 
 const styles = theme =>
   createStyles({
@@ -45,6 +35,9 @@ const styles = theme =>
       [theme.breakpoints.up('md')]: {
         width: `calc(100% - ${drawerWidth}px)`
       }
+    },
+    flex: {
+      flex: 1
     },
     menuButton: {
       [theme.breakpoints.up('md')]: {
@@ -74,6 +67,7 @@ interface State {
 
 interface Props extends WithStyles<typeof styles> {
   title: string;
+  isServer: boolean;
 }
 
 class AppComponent extends React.Component<Props, State> {
@@ -90,44 +84,46 @@ class AppComponent extends React.Component<Props, State> {
 
     return (
       <main>
-        <MobxProvider
-          AutoObservableFactory={observableFactory}
-          auth={authService}
-        >
-          <div className={classes.root}>
-            <WithAuth>
-              <AppBar className={classes.appBar}>
-                <Toolbar>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={this.handleDrawerToggle}
-                    className={classes.menuButton}
-                  >
-                    <Icon>menu</Icon>
-                  </IconButton>
-                  <Typography variant="title" color="inherit" noWrap>
-                    {this.props.title}
-                  </Typography>
-                </Toolbar>
-              </AppBar>
-              <AppDrawer
-                mobileOpen={this.state.mobileOpen}
-                onClose={() => this.setState({ mobileOpen: false })}
-              >
-                <AppDrawerMenu />
-              </AppDrawer>
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
-                {this.props.children}
-              </main>
-            </WithAuth>
-          </div>
-        </MobxProvider>
+        <div className={classes.root}>
+          <WithAuth>
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={this.handleDrawerToggle}
+                  className={classes.menuButton}
+                >
+                  <Icon>menu</Icon>
+                </IconButton>
+                <Typography
+                  variant="title"
+                  color="inherit"
+                  noWrap
+                  className={classes.flex}
+                >
+                  {this.props.title}
+                </Typography>
+                <AuthStateAvatar />
+              </Toolbar>
+            </AppBar>
+            <AppDrawer
+              mobileOpen={this.state.mobileOpen}
+              onClose={() => this.setState({ mobileOpen: false })}
+            >
+              <AppDrawerMenu />
+            </AppDrawer>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              {this.props.children}
+            </main>
+          </WithAuth>
+        </div>
       </main>
     );
   }
 }
 
-const App = withRoot(withStyles(styles)(AppComponent));
+const StyledApp = withStyles(styles)(AppComponent);
+const App = withRoot(StyledApp);
 export { App };
