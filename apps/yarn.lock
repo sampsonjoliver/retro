@@ -3330,7 +3330,7 @@ firebase@2.x.x:
   dependencies:
     faye-websocket ">=0.6.0"
 
-firebase@5.2.0, firebase@^5.2.0:
+firebase@5.2.0, firebase@^5.0.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.2.0.tgz#aae53339ab510f523217fedd92246fe9f05cfd66"
   dependencies:
@@ -5089,14 +5089,14 @@ mkdirp@0.5.x, mkdirp@0.x.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
-mobx-react@^5.0.0, mobx-react@^5.2.3:
+mobx-react@^5.2.3:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-5.2.3.tgz#cdf6141c2fe63377c5813cbd254e8ce0d4676631"
   dependencies:
     hoist-non-react-statics "^2.5.0"
     react-lifecycles-compat "^3.0.2"
 
-mobx@^4.2.0, mobx@^4.3.1:
+mobx@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-4.3.1.tgz#334e5aab4916b1d43f0faf3605a64b1b4b3ccb8d"
 
@@ -6083,14 +6083,11 @@ react-event-listener@^0.6.0:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
-react-firestore-mobx-bindings@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-firestore-mobx-bindings/-/react-firestore-mobx-bindings-0.0.4.tgz#1f088c89e8991b44624dd2ed0077910780c87134"
+react-firestore-mobx-bindings@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-firestore-mobx-bindings/-/react-firestore-mobx-bindings-0.0.8.tgz#1a43009b0ac10edbd6913f451f40d6e4c885cc82"
   dependencies:
-    firebase "^5.2.0"
-    mobx "^4.2.0"
-    mobx-react "^5.0.0"
-    react "^16.3.2"
+    firebase "^5.0.0"
 
 react-hot-loader@4.1.3:
   version "4.1.3"

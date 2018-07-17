@@ -9,3 +9,8 @@ interface UserInfo {
   currentSprintId: string;
   preferences: object;
 }
+
+interface Todo {
+  title: string;
+  status: 'complete' | 'incomplete';
+}

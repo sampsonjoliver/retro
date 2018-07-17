@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Context } from 'next/Document';
 
 import { Provider as MobxProvider } from 'mobx-react';
-import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
+import { FirestoreService } from '../services/firestore';
 
 import { initStore, AuthStore } from '../services/auth';
 import { initializeApp } from '../services/firebase';
-import { withRoot } from './withRoot';
 
 interface PageProps extends Context {
   isServer: boolean;
@@ -27,15 +26,14 @@ function initializePage(Page: React.ComponentClass<any>) {
     }
 
     public render() {
-      const observableFactory = new FirestoreObservableFactory(
-        'FirestoreObservableFactory'
-      );
+      const firestoreService = new FirestoreService('FirestoreService');
 
       const { isServer, ...props } = this.props;
 
       return (
         <MobxProvider
-          AutoObservableFactory={observableFactory}
+          AutoObservableFactory={firestoreService}
+          FirestoreService={firestoreService}
           auth={this.authService}
         >
           <Page {...props} />
