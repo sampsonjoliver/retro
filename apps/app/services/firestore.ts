@@ -17,10 +17,13 @@ class FirestoreService extends FirestoreObservableFactory {
   }
 
   @action
-  public createTodo(todo: Todo) {
+  public createTodo(sprintId: string, todo: Todo) {
     return request({
       requestType: 'createTodo',
-      payload: todo
+      payload: {
+        sprintId,
+        ...todo
+      }
     });
   }
 
