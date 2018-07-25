@@ -47,7 +47,7 @@ const AppDrawerMenuComponent = (props: Props) => {
               sprint => sprint.id === backlogId
             );
             const otherSprints = sprints.data.filter(
-              sprint => sprint.id !== currentSprintId && sprint.id !== backlogId
+              sprint => sprint.id !== backlogId
             );
 
             const listItems = otherSprints.map(sprint => {
