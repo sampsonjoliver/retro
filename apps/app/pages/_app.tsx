@@ -1,8 +1,8 @@
-import App, { Container } from 'next/app';
-import React from 'react';
-import { useStaticRendering } from 'mobx-react';
-import DocumentComponent, { Context } from 'next/Document';
-import { SingletonRouter } from 'next/Router';
+import App, { Container } from "next/app";
+import React from "react";
+import { useStaticRendering } from "mobx-react";
+import DocumentComponent, { Context } from "next/document";
+import { SingletonRouter } from "next/router";
 
 interface AppProps {
   ctx: Context;

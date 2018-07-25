@@ -1,5 +1,5 @@
-import firebase from 'firebase';
-import { observable, action, reaction } from 'mobx';
+import firebase from "firebase";
+import { observable, action, reaction } from "mobx";
 
 let store: AuthStore | null = null;
 
@@ -20,6 +20,10 @@ class AuthStore {
     );
   }
 
+  public get userId() {
+    return this.user ? this.user.uid : null;
+  }
+
   public signInAnonymously() {
     this.auth.signInAnonymously();
   }
@@ -35,7 +39,7 @@ class AuthStore {
 
   @action
   public setUser(user: firebase.User | null) {
-    console.log(`Signed in as ${(user || { uid: 'null' }).uid}`);
+    console.log(`Signed in as ${(user || { uid: "null" }).uid}`);
     this.user = user;
   }
 
@@ -47,11 +51,11 @@ class AuthStore {
 
   private watchUserInfo(user: firebase.User | null) {
     this.disposeUserInfoListener();
-    console.log(`Listening for user info on ${(user || { uid: '' }).uid}`);
+    console.log(`Listening for user info on ${(user || { uid: "" }).uid}`);
 
     if (user) {
       this.userInfoListener = this.firestore
-        .collection('users')
+        .collection("users")
         .doc(user.uid)
         .onSnapshot(snapshot => {
           this.setUserInfo(snapshot.data() as UserInfo);

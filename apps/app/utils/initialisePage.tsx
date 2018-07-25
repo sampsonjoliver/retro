@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import { Context } from 'next/Document';
+import React, { Component } from "react";
+import { Context } from "next/document";
+import { Provider as MobxProvider } from "mobx-react";
 
-import { Provider as MobxProvider } from 'mobx-react';
-import { FirestoreService } from '../services/firestore';
-
-import { initStore, AuthStore } from '../services/auth';
-import { initializeApp } from '../services/firebase';
+import { FirestoreService } from "../services/firestore";
+import { initStore, AuthStore } from "../services/auth";
+import { initializeApp } from "../services/firebase";
 
 interface PageProps extends Context {
   isServer: boolean;
 }
-function initializePage(Page: React.ComponentClass<any>) {
+function initializePage(
+  Page: React.ComponentClass<any> | React.ComponentType<any>
+) {
   class PageComponent extends Component<PageProps> {
     private authService?: AuthStore;
 
@@ -26,7 +27,7 @@ function initializePage(Page: React.ComponentClass<any>) {
     }
 
     public render() {
-      const firestoreService = new FirestoreService('FirestoreService');
+      const firestoreService = new FirestoreService("FirestoreService");
 
       const { isServer, ...props } = this.props;
 

@@ -1,34 +1,66 @@
-import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
-import { action } from 'mobx';
-import { initialiseApp } from '../firebase-requests/app';
-import { request } from '../firebase-requests/request';
+import { FirestoreObservableFactory } from "react-firestore-mobx-bindings";
+import { action } from "mobx";
+import { firestore } from "firebase";
 
-initialiseApp({
-  rootCollection: 'requests'
-});
+interface Request {
+  requestType: string;
+  payload: object;
+}
+
+const request = (req: Request) =>
+  firestore()
+    .collection("requests")
+    .doc("root")
+    .collection(req.requestType)
+    .add(req);
 
 class FirestoreService extends FirestoreObservableFactory {
   @action
   public createSprint(sprint: Sprint) {
     return request({
-      requestType: 'createSprint',
+      requestType: "createSprint",
       payload: sprint
     });
   }
 
   @action
-  public createTodo(sprintId: string, todo: Todo) {
+  public createTodo(todo: Todo) {
     return request({
-      requestType: 'createTodo',
+      requestType: "createTodo",
       payload: {
-        sprintId,
         ...todo
       }
     });
   }
 
+  @action
+  public updateTodo(todo: Todo) {
+    this.ensureObjectId(todo);
+
+    return request({
+      requestType: "updateTodo",
+      payload: todo
+    });
+  }
+
+  @action
+  public archiveTodo(todo: Todo) {
+    this.ensureObjectId(todo);
+
+    return request({
+      requestType: "archiveTodo",
+      payload: todo
+    });
+  }
+
   constructor(name: string) {
     super(name);
+  }
+
+  private ensureObjectId(object: WithId) {
+    if (!object.id) {
+      throw new Error("Object missing id");
+    }
   }
 }
 

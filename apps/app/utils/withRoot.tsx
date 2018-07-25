@@ -1,7 +1,7 @@
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import DocumentComponent, { Context } from 'next/Document';
+import DocumentComponent, { Context } from 'next/document';
 import getPageContext, { PageContext } from './getPageContext';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 function withRoot(Component: typeof DocumentComponent | any) {
-  class WithRoot extends React.Component<Props> {
+  class WithRoot<TProps> extends React.Component<Props & TProps> {
     public pageContext: PageContext;
 
     public static async getInitialProps(ctx: Context) {
@@ -20,10 +20,10 @@ function withRoot(Component: typeof DocumentComponent | any) {
       return {};
     }
 
-    constructor(props: Props) {
+    constructor(props: Props & TProps) {
       super(props);
 
-      this.pageContext = this.props.pageContext || getPageContext();
+      this.pageContext = this.props.pageContext as PageContext || getPageContext();
     }
 
     public componentDidMount() {
