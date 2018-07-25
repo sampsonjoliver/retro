@@ -1,4 +1,4 @@
-import { functions } from './firebase-requests';
+import { functions } from 'firestore-request';
 import { addTodoToSprint } from './models/todo';
 
 interface TodoCreateRequest {
