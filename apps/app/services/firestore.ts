@@ -1,6 +1,6 @@
-import { FirestoreObservableFactory } from "react-firestore-mobx-bindings";
-import { action } from "mobx";
-import { firestore } from "firebase";
+import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
+import { action } from 'mobx';
+import { firestore } from 'firebase';
 
 interface Request {
   requestType: string;
@@ -9,8 +9,8 @@ interface Request {
 
 const request = (req: Request) =>
   firestore()
-    .collection("requests")
-    .doc("root")
+    .collection('requests')
+    .doc('root')
     .collection(req.requestType)
     .add(req);
 
@@ -18,15 +18,16 @@ class FirestoreService extends FirestoreObservableFactory {
   @action
   public createSprint(sprint: Sprint) {
     return request({
-      requestType: "createSprint",
+      requestType: 'createSprint',
       payload: sprint
     });
   }
 
   @action
   public createTodo(todo: Todo) {
+    console.log('Creating todo', todo);
     return request({
-      requestType: "createTodo",
+      requestType: 'createTodo',
       payload: {
         ...todo
       }
@@ -36,9 +37,9 @@ class FirestoreService extends FirestoreObservableFactory {
   @action
   public updateTodo(todo: Todo) {
     this.ensureObjectId(todo);
-
+    console.log('Updating todo', todo);
     return request({
-      requestType: "updateTodo",
+      requestType: 'updateTodo',
       payload: todo
     });
   }
@@ -46,9 +47,10 @@ class FirestoreService extends FirestoreObservableFactory {
   @action
   public archiveTodo(todo: Todo) {
     this.ensureObjectId(todo);
+    console.log('Archiving todo', todo);
 
     return request({
-      requestType: "archiveTodo",
+      requestType: 'archiveTodo',
       payload: todo
     });
   }
@@ -59,7 +61,7 @@ class FirestoreService extends FirestoreObservableFactory {
 
   private ensureObjectId(object: WithId) {
     if (!object.id) {
-      throw new Error("Object missing id");
+      throw new Error('Object missing id');
     }
   }
 }
