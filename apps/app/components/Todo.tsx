@@ -194,15 +194,26 @@ class TodoView extends React.Component<Props, State> {
         >
           {!isInCurrentSprint && (
             <MenuItem onClick={() => this.moveTodoToSprint(currentSprintId)}>
-              Move to Current Sprint
+              <ListItemIcon>
+                <Icon>wb_sunny</Icon>
+              </ListItemIcon>
+              <ListItemText inset primary="Move to Current Sprint" />
             </MenuItem>
           )}
           {!isInBacklog && (
             <MenuItem onClick={() => this.moveTodoToSprint(backlogId)}>
-              Move to Backlog
+              <ListItemIcon>
+                <Icon>list_alt</Icon>
+              </ListItemIcon>
+              <ListItemText inset primary="Move to Backlog" />
             </MenuItem>
           )}
-          <MenuItem onClick={() => this.deleteTodo()}>Delete</MenuItem>
+          <MenuItem onClick={() => this.deleteTodo()}>
+            <ListItemIcon>
+              <Icon>delete</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Delete" />
+          </MenuItem>
         </Menu>
       </>
     );
