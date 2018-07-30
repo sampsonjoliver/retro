@@ -4,6 +4,7 @@ import { firestore } from 'firebase';
 
 interface Request {
   requestType: string;
+  status?: 'pending' | 'success' | 'failed';
   payload: object;
 }
 
@@ -12,7 +13,10 @@ const request = (req: Request) =>
     .collection('requests')
     .doc('root')
     .collection(req.requestType)
-    .add(req);
+    .add({
+      ...req,
+      status: req.status || 'pending'
+    });
 
 class FirestoreService extends FirestoreObservableFactory {
   @action
