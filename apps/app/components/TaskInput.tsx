@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   TextField,
   Icon,
@@ -9,12 +9,12 @@ import {
   Button,
   CircularProgress,
   Theme
-} from "@material-ui/core";
-import green from "@material-ui/core/colors/green";
-import { inject, observer } from "mobx-react";
-import { drawerWidth } from "../consts";
-import { FirestoreService } from "../services/firestore";
-import { AuthStore } from "../services/auth";
+} from '@material-ui/core';
+import green from '@material-ui/core/colors/green';
+import { inject, observer } from 'mobx-react';
+import { drawerWidth } from '../consts';
+import { FirestoreService } from '../services/firestore';
+import { AuthStore } from '../services/auth';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -24,10 +24,10 @@ const styles = (theme: Theme) =>
       paddingRight: theme.spacing.unit * 3,
       paddingBottom: theme.spacing.unit * 2,
       paddingTop: theme.spacing.unit * 2,
-      display: "flex",
-      position: "fixed",
+      display: 'flex',
+      position: 'fixed',
       left: 0,
-      [theme.breakpoints.up("md")]: {
+      [theme.breakpoints.up('md')]: {
         left: `${drawerWidth}px`
       },
       right: 0,
@@ -35,14 +35,14 @@ const styles = (theme: Theme) =>
     },
     buttonSuccess: {
       backgroundColor: green[500],
-      "&:hover": {
+      '&:hover': {
         backgroundColor: green[700]
       }
     },
     fabProgress: {
-      position: "fixed",
-      bottom: "10px",
-      right: "18px",
+      position: 'fixed',
+      bottom: '10px',
+      right: '18px',
       zIndex: 1
     }
   });
@@ -59,11 +59,11 @@ interface State {
   isTodoCreated: boolean;
 }
 
-@inject("FirestoreService", "auth")
+@inject('FirestoreService', 'auth')
 @observer
 class TaskInputComponent extends React.Component<Props, State> {
   public state = {
-    todoName: "",
+    todoName: '',
     isCreatingTodo: false,
     isTodoCreated: false
   };
@@ -81,11 +81,11 @@ class TaskInputComponent extends React.Component<Props, State> {
           this.props.sprintId || this.props.auth.userInfo.currentSprintId,
         userId: this.props.auth.userId,
         title: this.state.todoName,
-        status: "incomplete"
+        status: 'incomplete'
       });
 
       this.setState({
-        todoName: "",
+        todoName: '',
         isCreatingTodo: true
       });
 
@@ -114,10 +114,10 @@ class TaskInputComponent extends React.Component<Props, State> {
         />
         <Button
           variant="fab"
-          color={this.state.isTodoCreated ? "primary" : "secondary"}
+          color={this.state.isTodoCreated ? 'primary' : 'secondary'}
           onClick={() => this.createTodo()}
         >
-          <Icon>{this.state.isTodoCreated ? "check" : "add"}</Icon>
+          <Icon>{this.state.isTodoCreated ? 'check' : 'add'}</Icon>
         </Button>
         {this.state.isCreatingTodo && (
           <CircularProgress

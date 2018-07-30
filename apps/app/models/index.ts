@@ -1,4 +1,4 @@
-type SprintId = string | "backlog";
+type SprintId = string | 'backlog';
 
 interface Sprint extends WithId {
   userId: string;
@@ -17,7 +17,7 @@ interface Todo extends WithId {
   sprintId: SprintId;
   userId: string;
   title: string;
-  status: "complete" | "incomplete";
+  status: 'complete' | 'incomplete';
 }
 
 interface WithId {
