@@ -1,11 +1,12 @@
-import firebase from "firebase";
-import { observable, action, reaction } from "mobx";
+import firebase from 'firebase';
+import { observable, action, reaction, autorun } from 'mobx';
 
 let store: AuthStore | null = null;
 
 class AuthStore {
-  @observable public user: firebase.User | null = null;
+  @observable public user?: firebase.User | null = undefined;
   @observable public userInfo: UserInfo | null = null;
+  @observable public isLoading: boolean;
 
   private userListener?: () => void;
   private userInfoListener?: () => void;
@@ -14,10 +15,30 @@ class AuthStore {
   private firestore = firebase.firestore();
 
   public constructor() {
-    reaction(() => this.user, user => this.watchUserInfo(user));
-    this.userListener = this.auth.onAuthStateChanged(user =>
-      this.setUser(user)
+    this.isLoading = true;
+    reaction(
+      () => this.user,
+      user => {
+        this.watchUserInfo(user);
+      }
     );
+    reaction(
+      () => ({ user: this.user, userInfo: this.userInfo }),
+      ({ user, userInfo }) => {
+        if (user === undefined) {
+          this.setIsLoading(true);
+        } else if (user === null) {
+          this.setIsLoading(false);
+        } else if (user && !userInfo) {
+          this.setIsLoading(true);
+        } else {
+          this.setIsLoading(false);
+        }
+      }
+    );
+    this.userListener = this.auth.onAuthStateChanged(user => {
+      this.setUser(user);
+    });
   }
 
   public get userId() {
@@ -39,7 +60,7 @@ class AuthStore {
 
   @action
   public setUser(user: firebase.User | null) {
-    console.log(`Signed in as ${(user || { uid: "null" }).uid}`);
+    console.log(`Signed in as ${(user || { uid: 'null' }).uid}`);
     this.user = user;
   }
 
@@ -49,13 +70,19 @@ class AuthStore {
     this.userInfo = userInfo;
   }
 
-  private watchUserInfo(user: firebase.User | null) {
+  @action
+  public setIsLoading(isLoading: boolean) {
+    console.log(`Set auth isLoading ${isLoading}`);
+    this.isLoading = isLoading;
+  }
+
+  private watchUserInfo(user: firebase.User | null | undefined) {
     this.disposeUserInfoListener();
-    console.log(`Listening for user info on ${(user || { uid: "" }).uid}`);
+    console.log(`Listening for user info on ${(user || { uid: '' }).uid}`);
 
     if (user) {
       this.userInfoListener = this.firestore
-        .collection("users")
+        .collection('users')
         .doc(user.uid)
         .onSnapshot(snapshot => {
           this.setUserInfo(snapshot.data() as UserInfo);

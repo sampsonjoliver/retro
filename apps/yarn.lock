@@ -2660,6 +2660,10 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
+dialog-polyfill@^0.4.7:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/dialog-polyfill/-/dialog-polyfill-0.4.10.tgz#c4ea68a0deed4abb59a6a2a025c548b278cd532e"
+
 didyoumean@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/didyoumean/-/didyoumean-1.2.1.tgz#e92edfdada6537d484d73c0172fd1eba0c4976ff"
@@ -3353,6 +3357,12 @@ firebase@5.2.0, firebase@^5.0.0:
     "@firebase/messaging" "0.3.5"
     "@firebase/polyfill" "0.3.3"
     "@firebase/storage" "0.2.3"
+
+firebaseui@^3.2.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-3.4.0.tgz#ca9ebc708aeab5bf2e6e060c4caf12674d9db186"
+  dependencies:
+    dialog-polyfill "^0.4.7"
 
 flat-arguments@^1.0.0:
   version "1.0.2"
@@ -6097,6 +6107,12 @@ react-event-listener@^0.6.0:
     "@babel/runtime" "^7.0.0-beta.42"
     prop-types "^15.6.0"
     warning "^3.0.0"
+
+react-firebaseui@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/react-firebaseui/-/react-firebaseui-3.0.6.tgz#8b5c83725464168394a9b43f732d1d35bfa2c575"
+  dependencies:
+    firebaseui "^3.2.0"
 
 react-firestore-mobx-bindings@0.0.8:
   version "0.0.8"
