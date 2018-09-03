@@ -54,6 +54,31 @@ class AuthStore {
     this.auth.signInWithRedirect(provider);
   }
 
+  public signInWithFacebook() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    this.auth.signInWithRedirect(provider);
+  }
+
+  public async linkAnonymousAccountWithGoogle() {
+    const idToken = await this.auth.currentUser!.getIdToken();
+
+    const linkedUser = await this.auth.currentUser!.linkAndRetrieveDataWithCredential(
+      firebase.auth.GoogleAuthProvider.credential(idToken)
+    );
+
+    this.setUser(linkedUser.user);
+  }
+
+  public async linkAnonymousAccountWithFacebook() {
+    const idToken = await this.auth.currentUser!.getIdToken();
+
+    const linkedUser = await this.auth.currentUser!.linkAndRetrieveDataWithCredential(
+      firebase.auth.FacebookAuthProvider.credential(idToken)
+    );
+
+    this.setUser(linkedUser.user);
+  }
+
   public signOut() {
     this.auth.signOut();
   }
