@@ -12,5 +12,6 @@ const WithRouter = (props: Props) => {
 
 const WithRouterWithRouter = withRouter(WithRouter as React.StatelessComponent<
   Required<Props>
->);
+>) as React.StatelessComponent<Props>;
+
 export { WithRouterWithRouter as WithRouter };

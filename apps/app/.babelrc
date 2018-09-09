@@ -9,7 +9,11 @@
       ]
     },
     "production": {
-      "plugins": ["transform-inline-environment-variables"]
+      "plugins": [
+        "transform-inline-environment-variables",
+        "transform-decorators-legacy",
+        "transform-class-properties"
+      ]
     }
   }
 }

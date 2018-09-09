@@ -62,6 +62,11 @@ const styles = (theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    anonText: {
+      width: theme.spacing.unit * 50,
+      textAlign: 'center',
+      margin: theme.spacing.unit * 2
     }
   });
 
@@ -161,8 +166,13 @@ const AuthPage = (props: AuthPageProps) => {
             size="large"
             onClick={() => props.signInAnonymously()}
           >
-            Just Get Started
+            Just Get Started*
           </Button>
+          <Typography variant="caption" className={classes.anonText}>
+            * Anonymous accounts cannot sync data cross-device, and may lose
+            data when the browser clears site cookies. You can upgrade your
+            account at any time.
+          </Typography>
         </div>
       </div>
     </main>

@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { Divider, List, CircularProgress } from '@material-ui/core';
-import { inject, observer } from 'mobx-react';
 
 import {
   FirestoreQueryComponent,
   FirestoreAutoObservable
 } from 'react-firestore-mobx-bindings';
 import { DrawerItem, UserDrawerItem } from './DrawerItem';
-import { AuthStore } from '../services/auth';
 import { WithAuth } from './WithAuth';
 
 const styles: { [key: string]: React.CSSProperties } = {
