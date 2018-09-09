@@ -36,3 +36,4 @@ lib
 dist/
 
 .env
+apps/\.envrc
