@@ -140,7 +140,7 @@ class TodoView extends React.Component<Props, State> {
       willChange: 'transform'
     };
 
-    const { currentSprintId, backlogId } = this.props.auth!.userInfo!;
+    const { currentSprintId, backlogId } = this.props.auth!.user!;
     const isInCurrentSprint = this.props.todo.sprintId === currentSprintId;
     const isInBacklog = this.props.todo.sprintId === backlogId;
 
@@ -193,7 +193,7 @@ class TodoView extends React.Component<Props, State> {
           onClose={() => this.closeMenu()}
         >
           {!isInCurrentSprint && (
-            <MenuItem onClick={() => this.moveTodoToSprint(currentSprintId)}>
+            <MenuItem onClick={() => this.moveTodoToSprint(currentSprintId!)}>
               <ListItemIcon>
                 <Icon>wb_sunny</Icon>
               </ListItemIcon>
@@ -201,7 +201,7 @@ class TodoView extends React.Component<Props, State> {
             </MenuItem>
           )}
           {!isInBacklog && (
-            <MenuItem onClick={() => this.moveTodoToSprint(backlogId)}>
+            <MenuItem onClick={() => this.moveTodoToSprint(backlogId!)}>
               <ListItemIcon>
                 <Icon>list_alt</Icon>
               </ListItemIcon>

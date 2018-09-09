@@ -1,36 +1,29 @@
+import React from 'react';
 import { observer, inject } from 'mobx-react';
-import React, { ReactNode } from 'react';
 
-import { AuthStore } from '../services/auth';
-import { withRouter, SingletonRouter } from 'next/router';
+import { AuthStore, AuthState } from '../services/auth';
 
 interface Props {
   auth?: AuthStore;
-  children?: ReactNode;
-  router?: SingletonRouter;
-}
-
-interface InjectedProps {
-  auth: AuthStore;
-}
-
-@inject('auth')
-@observer
-class WithAuth extends React.Component<Required<Props>> {
-  public render() {
-    const injected = this.props as InjectedProps;
-    if (injected.auth.user && injected.auth.userInfo && this.props.children) {
-      return <>{this.props.children}</>;
-    } else {
-      this.props.router!.push('/');
-      return (
-        <>
-          <p>Ya gotta login m9</p>
-        </>
-      );
+  children: (
+    args: {
+      authState: AuthState;
+      user: RetroUser;
+      authService: AuthStore;
     }
-  }
+  ) => React.ReactNode;
 }
 
-const WithAuthWithRouter = withRouter(WithAuth) as React.ComponentClass<Props>;
-export { WithAuthWithRouter as WithAuth };
+const Auth = (props: Props) => {
+  return props.children({
+    authState: props.auth!.authState,
+    user: props.auth!.user,
+    authService: props.auth!
+  });
+};
+
+const WithAuth = inject('auth')(
+  observer(Auth as React.StatelessComponent<Props>)
+);
+
+export { WithAuth };

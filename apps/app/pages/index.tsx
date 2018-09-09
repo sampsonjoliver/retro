@@ -3,7 +3,10 @@ import { Context } from 'next/document';
 import { withRouter, SingletonRouter } from 'next/router';
 
 import { initializePage } from '../utils/initialisePage';
-import AuthRouter from '../components/AuthRouter';
+import { WithAuth } from '../components/WithAuth';
+import { WithRouter } from '../components/WithRouter';
+import { AuthState } from '../services/auth';
+import { CircularProgress } from '@material-ui/core';
 
 interface PageProps extends Context {
   isServer: boolean;
@@ -16,7 +19,26 @@ class Index extends React.Component<PageProps> {
   }
 
   public render() {
-    return <AuthRouter router={this.props.router} />;
+    return (
+      <WithAuth>
+        {({ authState, user }) => (
+          <WithRouter>
+            {({ router }) => {
+              if (authState === AuthState.signedIn) {
+                router.replace({
+                  pathname: '/sprint',
+                  query: { id: user.currentSprintId }
+                });
+              } else {
+                router.replace('/login');
+              }
+
+              return <CircularProgress />;
+            }}
+          </WithRouter>
+        )}
+      </WithAuth>
+    );
   }
 }
 

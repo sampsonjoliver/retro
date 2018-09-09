@@ -1,48 +1,55 @@
 import firebase from 'firebase';
-import { observable, action, reaction, autorun } from 'mobx';
+import { observable, action, reaction, computed } from 'mobx';
 
 let store: AuthStore | null = null;
 
-class AuthStore {
-  @observable public user?: firebase.User | null = undefined;
-  @observable public userInfo: UserInfo | null = null;
-  @observable public isLoading: boolean;
+export enum AuthState {
+  signedOut,
+  resolving,
+  loading,
+  signedIn
+}
 
-  private userListener?: () => void;
+class AuthStore {
+  @observable private _user?: firebase.User | null = undefined;
+  @observable private _userInfo: UserInfo | null = null;
+
+  @computed
+  public get user(): RetroUser {
+    return {
+      ...this._user,
+      ...this._userInfo
+    };
+  }
+
+  @computed
+  public get authState() {
+    if (this._user === null) {
+      return AuthState.signedOut;
+    } else if (this._user === undefined) {
+      return AuthState.resolving;
+    } else if (!!this._user && !this._userInfo) {
+      return AuthState.loading;
+    } else {
+      return AuthState.signedIn;
+    }
+  }
+
   private userInfoListener?: () => void;
 
   private auth = firebase.auth();
   private firestore = firebase.firestore();
 
   public constructor() {
-    this.isLoading = true;
     reaction(
-      () => this.user,
+      () => this._user,
       user => {
-        this.watchUserInfo(user);
+        this.loadUser(user);
       }
     );
-    reaction(
-      () => ({ user: this.user, userInfo: this.userInfo }),
-      ({ user, userInfo }) => {
-        if (user === undefined) {
-          this.setIsLoading(true);
-        } else if (user === null) {
-          this.setIsLoading(false);
-        } else if (user && !userInfo) {
-          this.setIsLoading(true);
-        } else {
-          this.setIsLoading(false);
-        }
-      }
-    );
-    this.userListener = this.auth.onAuthStateChanged(user => {
+    this.auth.onAuthStateChanged(user => {
       this.setUser(user);
     });
-  }
-
-  public get userId() {
-    return this.user ? this.user.uid : null;
   }
 
   public signInAnonymously() {
@@ -86,22 +93,16 @@ class AuthStore {
   @action
   public setUser(user: firebase.User | null) {
     console.log(`Signed in as ${(user || { uid: 'null' }).uid}`);
-    this.user = user;
+    this._user = user;
   }
 
   @action
   public setUserInfo(userInfo: UserInfo | null) {
     console.log(`Stored user info ${JSON.stringify(userInfo)}`);
-    this.userInfo = userInfo;
+    this._userInfo = userInfo;
   }
 
-  @action
-  public setIsLoading(isLoading: boolean) {
-    console.log(`Set auth isLoading ${isLoading}`);
-    this.isLoading = isLoading;
-  }
-
-  private watchUserInfo(user: firebase.User | null | undefined) {
+  private loadUser(user: firebase.User | null | undefined) {
     this.disposeUserInfoListener();
     console.log(`Listening for user info on ${(user || { uid: '' }).uid}`);
 
