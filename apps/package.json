@@ -15,7 +15,9 @@
     "lint-server": "tslint --project server",
     "build-app": "next build app",
     "build-server": "tsc --project server",
-    "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"lib\" -C"
+    "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"lib\" -C",
+    "build": "next build app",
+    "start": "next start app"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
@@ -29,6 +31,7 @@
     "mobx": "^4.3.1",
     "mobx-react": "^5.2.3",
     "next": "^6.1.2",
+    "now": "^11.4.1",
     "prop-types": "^15.6.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

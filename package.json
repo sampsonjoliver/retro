@@ -5,10 +5,8 @@
   "repository": "https://github.com/sampsonjoliver/retro.git",
   "author": "sampsonjoliver <sampsonjoliver@outlook.com>",
   "license": "MIT",
-  "scripts": {
-  },
-  "dependencies": {
-  },
+  "scripts": {},
+  "dependencies": {},
   "devDependencies": {
     "cpx": "1.5.0",
     "firebase-tools": "3.18.4",
