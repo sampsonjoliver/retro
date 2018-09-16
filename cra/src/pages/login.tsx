@@ -134,7 +134,7 @@ const AuthPage = (props: AuthPageProps) => {
             color="primary"
             onClick={() => props.signInWithGoogle()}
           >
-            <img src="/static/google.png" className={classes.loginIcon} />
+            <img src="/google.png" className={classes.loginIcon} />
             Sign in with Google
           </Button>
           <Button
@@ -143,7 +143,7 @@ const AuthPage = (props: AuthPageProps) => {
             color="primary"
             onClick={() => props.signInWithFacebook()}
           >
-            <img src="/static/facebook.png" className={classes.loginIcon} />
+            <img src="/facebook.png" className={classes.loginIcon} />
             Sign in with Facebook
           </Button>
           <Typography className={classes.title} variant="subheading">

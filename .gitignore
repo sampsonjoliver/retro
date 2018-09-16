@@ -35,6 +35,8 @@ node_modules
 lib
 dist/
 .next
+.firebase
+build/
 
 .env
 apps/\.envrc
