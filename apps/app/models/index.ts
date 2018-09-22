@@ -13,6 +13,14 @@ interface UserInfo {
   preferences: object;
 }
 
+type RetroUser = Partial<
+  firebase.User & {
+    currentSprintId: string;
+    backlogId: string;
+    preferences: object;
+  }
+>;
+
 interface Todo extends WithId {
   sprintId: SprintId;
   userId: string;

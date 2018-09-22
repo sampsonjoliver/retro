@@ -22,12 +22,9 @@ const SprintList = (props: Props) => {
             return (
               <>
                 {todos.data.map(todo => (
-                  <TodoView
-                    key={todo.id}
-                    todo={todo}
-                    isAddedToMyDay
-                    isCurrentSprint
-                  />
+                  <div key={todo.id || ''}>
+                    <TodoView todo={todo} isAddedToMyDay isCurrentSprint />
+                  </div>
                 ))}
               </>
             );

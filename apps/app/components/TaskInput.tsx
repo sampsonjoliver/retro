@@ -14,7 +14,7 @@ import green from '@material-ui/core/colors/green';
 import { inject, observer } from 'mobx-react';
 import { drawerWidth } from '../consts';
 import { FirestoreService } from '../services/firestore';
-import { AuthStore } from '../services/auth';
+import { AuthStore, AuthState } from '../services/auth';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -75,11 +75,11 @@ class TaskInputComponent extends React.Component<Props, State> {
   };
 
   public createTodo() {
-    if (this.props.auth && this.props.auth.userId && this.props.auth.userInfo) {
+    if (this.props.auth!.authState === AuthState.signedIn) {
       this.props.FirestoreService!.createTodo({
         sprintId:
-          this.props.sprintId || this.props.auth.userInfo.currentSprintId,
-        userId: this.props.auth.userId,
+          this.props.sprintId || this.props.auth!.user!.currentSprintId!,
+        userId: this.props.auth!.user!.uid!,
         title: this.state.todoName,
         status: 'incomplete'
       });

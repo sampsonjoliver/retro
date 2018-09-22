@@ -34,5 +34,7 @@ node_modules
 # Build folders
 lib
 dist/
+.next
 
 .env
+apps/\.envrc

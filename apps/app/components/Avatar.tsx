@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Button, Avatar, Menu, MenuItem } from '@material-ui/core';
-import { AuthStore } from '../services/auth';
+import { AuthStore, AuthState } from '../services/auth';
 
 interface AvatarProps {
   auth?: AuthStore;
@@ -35,7 +35,7 @@ class AuthStateAvatar extends Component<AvatarProps, State> {
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
-    if (this.props.auth!.user && this.props.auth!.userInfo) {
+    if (this.props.auth!.authState === AuthState.signedIn) {
       const avatarWidget = this.props.auth!.user!.photoURL ? (
         <Avatar
           alt={this.props.auth!.user!.displayName || undefined}
@@ -44,7 +44,9 @@ class AuthStateAvatar extends Component<AvatarProps, State> {
         />
       ) : (
         <Avatar onClick={this.setMenuAnchor}>
-          {this.props.auth!.user!.displayName!.charAt(0)}
+          {this.props.auth!.user!.displayName
+            ? this.props.auth!.user!.displayName!.charAt(0)
+            : '?'}
         </Avatar>
       );
 

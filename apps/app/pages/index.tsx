@@ -1,12 +1,16 @@
-import React from "react";
-import { Context } from "next/document";
+import React from 'react';
+import { Context } from 'next/document';
+import { withRouter, SingletonRouter } from 'next/router';
 
-import { App } from "../components/App";
-import { TaskInput } from "../components/TaskInput";
-import { initializePage } from "../utils/initialisePage";
+import { initializePage } from '../utils/initialisePage';
+import { WithAuth } from '../components/WithAuth';
+import { WithRouter } from '../components/WithRouter';
+import { AuthState } from '../services/auth';
+import { CircularProgress } from '@material-ui/core';
 
 interface PageProps extends Context {
   isServer: boolean;
+  router: SingletonRouter;
 }
 
 class Index extends React.Component<PageProps> {
@@ -16,14 +20,27 @@ class Index extends React.Component<PageProps> {
 
   public render() {
     return (
-      <App title="Index" isServer={this.props.isServer}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <p>Index Page</p>
-          <TaskInput />
-        </div>
-      </App>
+      <WithAuth>
+        {({ authState, user }) => (
+          <WithRouter>
+            {({ router }) => {
+              if (authState === AuthState.signedIn) {
+                router.replace({
+                  pathname: '/sprint',
+                  query: { id: user.currentSprintId }
+                });
+              } else {
+                router.replace('/login');
+              }
+
+              return <CircularProgress />;
+            }}
+          </WithRouter>
+        )}
+      </WithAuth>
     );
   }
 }
 
-export default initializePage(Index);
+const IndexWithRouter = withRouter(Index);
+export default initializePage(IndexWithRouter);

@@ -3,6 +3,7 @@
   "rulesDirectory": ["../node_modules/tslint-react/rules"],
   "rules": {
     "interface-name": [true, "never-prefix"],
+    "interface-over-type-literal": false,
     "jsx-boolean-value": false,
     "jsx-no-lambda": false,
     "jsx-use-translation-function": false,

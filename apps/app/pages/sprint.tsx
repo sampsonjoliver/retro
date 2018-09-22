@@ -1,11 +1,11 @@
-import React from "react";
-import { Context } from "next/document";
-import { withRouter, SingletonRouter } from "next/router";
+import React from 'react';
+import { Context } from 'next/document';
+import { withRouter, SingletonRouter } from 'next/router';
 
-import { App } from "../components/App";
-import { TaskInput } from "../components/TaskInput";
-import { initializePage } from "../utils/initialisePage";
-import { SprintList } from "../components/SprintList";
+import { App } from '../components/App';
+import { TaskInput } from '../components/TaskInput';
+import { initializePage } from '../utils/initialisePage';
+import { SprintList } from '../components/SprintList';
 
 interface PageProps extends Context {
   isServer: boolean;
@@ -24,7 +24,7 @@ class Index extends React.Component<PageProps> {
 
     return (
       <App title={sprintId} isServer={this.props.isServer}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <p>Index Page</p>
           <SprintList sprintId={sprintId} />
           <TaskInput sprintId={sprintId} />

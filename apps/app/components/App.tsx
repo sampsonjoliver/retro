@@ -1,37 +1,37 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { withStyles, createStyles, WithStyles } from "@material-ui/core/styles";
+import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 import {
   Icon,
   Typography,
   IconButton,
   AppBar,
   Toolbar
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { withRoot } from "../utils/withRoot";
-import { AppDrawer } from "./Drawer";
-import { AppDrawerMenu } from "./AppDrawerMenu";
-import { drawerWidth } from "../consts";
+import { withRoot } from '../utils/withRoot';
+import { AppDrawer } from './Drawer';
+import { AppDrawerMenu } from './AppDrawerMenu';
+import { drawerWidth } from '../consts';
 
-import { WithAuth } from "./WithAuth";
-import AuthStateAvatar from "./Avatar";
+import AuthStateAvatar from './Avatar';
+import { AuthProtected } from './AuthProtected';
 
 const styles = theme =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: "calc(100%)",
+      height: 'calc(100%)',
       zIndex: 1,
-      overflow: "hidden",
-      position: "relative",
-      display: "flex",
-      width: "100%"
+      overflow: 'hidden',
+      position: 'relative',
+      display: 'flex',
+      width: '100%'
     },
     appBar: {
-      position: "absolute",
+      position: 'absolute',
       marginLeft: drawerWidth,
-      [theme.breakpoints.up("md")]: {
+      [theme.breakpoints.up('md')]: {
         width: `calc(100% - ${drawerWidth}px)`
       }
     },
@@ -39,24 +39,24 @@ const styles = theme =>
       flex: 1
     },
     menuButton: {
-      [theme.breakpoints.up("md")]: {
-        display: "none"
+      [theme.breakpoints.up('md')]: {
+        display: 'none'
       }
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
-      [theme.breakpoints.up("md")]: {
-        position: "relative",
-        height: "100vh"
+      [theme.breakpoints.up('md')]: {
+        position: 'relative',
+        height: '100vh'
       }
     },
     content: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing.unit * 3,
-      display: "flex",
-      flexDirection: "column"
+      display: 'flex',
+      flexDirection: 'column'
     }
   });
 
@@ -83,7 +83,7 @@ class AppComponent extends React.Component<Props, State> {
     return (
       <main>
         <div className={classes.root}>
-          <WithAuth>
+          <AuthProtected>
             <AppBar className={classes.appBar}>
               <Toolbar>
                 <IconButton
@@ -115,7 +115,7 @@ class AppComponent extends React.Component<Props, State> {
               <div className={classes.toolbar} />
               {this.props.children}
             </main>
-          </WithAuth>
+          </AuthProtected>
         </div>
       </main>
     );

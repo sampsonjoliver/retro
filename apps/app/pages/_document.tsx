@@ -66,6 +66,17 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
+        <style jsx global>{`
+          main,
+          html,
+          body {
+            height: 100%;
+          }
+
+          #__next {
+            height: 100%;
+          }
+        `}</style>
         <body>
           <Main />
           <NextScript />
