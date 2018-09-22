@@ -3,8 +3,8 @@ type SprintId = string | 'backlog';
 interface Sprint extends WithId {
   userId: string;
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: firebase.firestore.Timestamp;
+  endDate: firebase.firestore.Timestamp;
 }
 
 interface UserInfo {

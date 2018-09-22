@@ -1,6 +1,7 @@
 import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
 import { action } from 'mobx';
 import * as firebase from 'firebase';
+import * as uuid from 'uuid/v4';
 
 interface Request {
   requestType: string;
@@ -20,33 +21,33 @@ const request = (req: Request) =>
     });
 
 class FirestoreService extends FirestoreObservableFactory {
+  private todos: firebase.firestore.CollectionReference;
+
   @action
-  public createSprint(sprint: Sprint) {
+  public rolloverSprint(sprint: Sprint) {
     return request({
-      requestType: 'createSprint',
+      requestType: 'rolloverSprint',
       payload: sprint
     });
   }
 
   @action
   public createTodo(todo: Todo) {
-    console.log('Creating todo', todo);
-    return request({
-      requestType: 'createTodo',
-      payload: {
-        ...todo
-      }
-    });
+    const todoWithId = {
+      id: uuid(),
+      ...todo
+    };
+
+    console.log('Creating todo', todoWithId);
+
+    return this.todos.doc(todoWithId.id).set(todoWithId);
   }
 
   @action
   public updateTodo(todo: Todo) {
     this.ensureObjectId(todo);
     console.log('Updating todo', todo);
-    return request({
-      requestType: 'updateTodo',
-      payload: todo
-    });
+    return this.todos.doc(todo.id).update(todo);
   }
 
   @action
@@ -54,14 +55,12 @@ class FirestoreService extends FirestoreObservableFactory {
     this.ensureObjectId(todo);
     console.log('Archiving todo', todo);
 
-    return request({
-      requestType: 'archiveTodo',
-      payload: todo
-    });
+    return this.todos.doc(todo.id).delete();
   }
 
   constructor(name: string) {
     super(name);
+    this.todos = firebase.firestore().collection('todos');
   }
 
   private ensureObjectId(object: WithId) {
