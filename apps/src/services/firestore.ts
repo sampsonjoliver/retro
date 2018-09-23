@@ -2,33 +2,13 @@ import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
 import { action } from 'mobx';
 import * as firebase from 'firebase';
 import * as uuid from 'uuid/v4';
-
-interface Request {
-  requestType: string;
-  status?: 'pending' | 'success' | 'failed';
-  payload: object;
-}
-
-const request = (req: Request) =>
-  firebase
-    .firestore()
-    .collection('requests')
-    .doc('root')
-    .collection(req.requestType)
-    .add({
-      ...req,
-      status: req.status || 'pending'
-    });
+import { request, Request } from '../utils/request';
 
 class FirestoreService extends FirestoreObservableFactory {
   private todos: firebase.firestore.CollectionReference;
 
-  @action
-  public rolloverSprint(sprint: Sprint) {
-    return request({
-      requestType: 'rolloverSprint',
-      payload: sprint
-    });
+  public makeRequest(requestData: Request) {
+    return request(requestData);
   }
 
   @action
