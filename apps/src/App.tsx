@@ -26,7 +26,7 @@ class App extends React.Component {
         <MobxProvider
           AutoObservableFactory={firestoreService}
           FirestoreService={firestoreService}
-          auth={authService}
+          AuthService={authService}
         >
           <BrowserRouter>
             <Switch>
