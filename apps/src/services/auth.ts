@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import { observable, action, reaction, computed } from 'mobx';
 
-let store: AuthStore | null = null;
+let store: AuthService | null = null;
 
 export enum AuthState {
   signedOut,
@@ -10,7 +10,7 @@ export enum AuthState {
   signedIn
 }
 
-class AuthStore {
+class AuthService {
   @observable private _user?: firebase.User | null = undefined;
   @observable private _userInfo: UserInfo | null = null;
 
@@ -128,9 +128,9 @@ class AuthStore {
 
 function initStore() {
   if (store === null) {
-    store = new AuthStore();
+    store = new AuthService();
   }
   return store;
 }
 
-export { AuthStore, initStore };
+export { AuthService, initStore };

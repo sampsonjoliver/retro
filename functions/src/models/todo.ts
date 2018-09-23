@@ -8,36 +8,43 @@ interface Todo {
   status: 'complete' | 'incomplete' | 'archived';
 }
 
-const todos = () => admin.firestore().collection('todos');
+const todos = admin.firestore().collection('todos');
 
 const createTodo = (todo: Todo) => {
-  const id = uuid();
-  return todos()
-    .doc(id)
-    .create({
-      id: id,
-      ...todo
-    });
+  const todoId = uuid();
+  console.log(`Creating todo ${todoId}`);
+  return todos.doc(todoId).create({
+    id: todoId,
+    ...todo
+  });
 };
 
-const updateTodo = (todo: Todo) => {
-  return todos()
-    .doc(todo.id)
-    .update({
-      ...todo
-    });
+const updateTodo = (todoId: string, todo: Partial<Todo>) => {
+  console.log(`Updating todo ${todoId}`, todo);
+  return todos.doc(todoId).update({
+    ...todo
+  });
 };
 
-const archiveTodo = (todo: Todo) => {
-  return todos()
-    .doc(todo.id)
-    .delete();
+const archiveTodo = (todoId: string) => {
+  console.log(`Updating todo ${todoId}`);
+  return todos.doc(todoId).delete();
+};
+
+const getOutstandingTodosForSprint = async (sprintId: string) => {
+  console.log(`Getting outstanding todos for sprint ${sprintId}`);
+  const sprintTodos = await todos
+    .where('sprintId', '==', sprintId)
+    .where('status', '==', 'incomplete')
+    .get();
+  return sprintTodos.docs.map(todo => todo.data() as Todo);
 };
 
 const TodoService = {
   createTodo,
   archiveTodo,
-  updateTodo
+  updateTodo,
+  getOutstandingTodosForSprint
 };
 
 export { Todo, TodoService };

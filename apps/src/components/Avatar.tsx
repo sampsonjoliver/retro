@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Button, Avatar, Menu, MenuItem } from '@material-ui/core';
-import { AuthStore, AuthState } from '../services/auth';
+import { AuthService, AuthState } from '../services/auth';
 
 interface AvatarProps {
-  auth?: AuthStore;
+  AuthService?: AuthService;
 }
 
 interface State {
   anchorEl: any;
 }
 
-@inject('auth')
+@inject('AuthService')
 @observer
 class AuthStateAvatar extends React.Component<AvatarProps, State> {
   public state = {
@@ -28,24 +28,24 @@ class AuthStateAvatar extends React.Component<AvatarProps, State> {
 
   public handleLogout = () => {
     this.handleClose();
-    this.props.auth!.signOut();
+    this.props.AuthService!.signOut();
   };
 
   public render() {
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
-    if (this.props.auth!.authState === AuthState.signedIn) {
-      const avatarWidget = this.props.auth!.user!.photoURL ? (
+    if (this.props.AuthService!.authState === AuthState.signedIn) {
+      const avatarWidget = this.props.AuthService!.user!.photoURL ? (
         <Avatar
-          alt={this.props.auth!.user!.displayName || undefined}
-          src={this.props.auth!.user!.photoURL || undefined}
+          alt={this.props.AuthService!.user!.displayName || undefined}
+          src={this.props.AuthService!.user!.photoURL || undefined}
           onClick={this.setMenuAnchor}
         />
       ) : (
         <Avatar onClick={this.setMenuAnchor}>
-          {this.props.auth!.user!.displayName
-            ? this.props.auth!.user!.displayName!.charAt(0)
+          {this.props.AuthService!.user!.displayName
+            ? this.props.AuthService!.user!.displayName!.charAt(0)
             : '?'}
         </Avatar>
       );

@@ -12,10 +12,12 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/login';
 import IndexPage from './pages';
 import SprintPage from './pages/sprint';
+import { SprintService } from './services/sprint';
 
 initializeApp();
 const authService = initStore();
 const firestoreService = new FirestoreService('FirestoreService');
+const sprintService = new SprintService(firestoreService, authService);
 
 const theme = createMuiTheme({});
 
@@ -26,7 +28,8 @@ class App extends React.Component {
         <MobxProvider
           AutoObservableFactory={firestoreService}
           FirestoreService={firestoreService}
-          auth={authService}
+          AuthService={authService}
+          SprintService={sprintService}
         >
           <BrowserRouter>
             <Switch>

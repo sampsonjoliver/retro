@@ -14,7 +14,7 @@ import green from '@material-ui/core/colors/green';
 import { inject, observer } from 'mobx-react';
 import { drawerWidth } from '../consts';
 import { FirestoreService } from '../services/firestore';
-import { AuthStore, AuthState } from '../services/auth';
+import { AuthService, AuthState } from '../services/auth';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -49,7 +49,7 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {
   FirestoreService?: FirestoreService;
-  auth?: AuthStore;
+  AuthService?: AuthService;
   sprintId?: string;
 }
 
@@ -59,7 +59,7 @@ interface State {
   isTodoCreated: boolean;
 }
 
-@inject('FirestoreService', 'auth')
+@inject('FirestoreService', 'AuthService')
 @observer
 class TaskInputComponent extends React.Component<Props, State> {
   public state = {
@@ -75,11 +75,11 @@ class TaskInputComponent extends React.Component<Props, State> {
   };
 
   public createTodo() {
-    if (this.props.auth!.authState === AuthState.signedIn) {
+    if (this.props.AuthService!.authState === AuthState.signedIn) {
       this.props.FirestoreService!.createTodo({
         sprintId:
-          this.props.sprintId || this.props.auth!.user!.currentSprintId!,
-        userId: this.props.auth!.user!.uid!,
+          this.props.sprintId || this.props.AuthService!.user!.currentSprintId!,
+        userId: this.props.AuthService!.user!.uid!,
         title: this.state.todoName,
         status: 'incomplete'
       });

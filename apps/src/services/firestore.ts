@@ -1,52 +1,33 @@
 import { FirestoreObservableFactory } from 'react-firestore-mobx-bindings';
 import { action } from 'mobx';
 import * as firebase from 'firebase';
-
-interface Request {
-  requestType: string;
-  status?: 'pending' | 'success' | 'failed';
-  payload: object;
-}
-
-const request = (req: Request) =>
-  firebase
-    .firestore()
-    .collection('requests')
-    .doc('root')
-    .collection(req.requestType)
-    .add({
-      ...req,
-      status: req.status || 'pending'
-    });
+import * as uuid from 'uuid/v4';
+import { request, Request } from '../utils/request';
 
 class FirestoreService extends FirestoreObservableFactory {
-  @action
-  public createSprint(sprint: Sprint) {
-    return request({
-      requestType: 'createSprint',
-      payload: sprint
-    });
+  private todos: firebase.firestore.CollectionReference;
+
+  public makeRequest(requestData: Request) {
+    return request(requestData);
   }
 
   @action
   public createTodo(todo: Todo) {
-    console.log('Creating todo', todo);
-    return request({
-      requestType: 'createTodo',
-      payload: {
-        ...todo
-      }
-    });
+    const todoWithId = {
+      id: uuid(),
+      ...todo
+    };
+
+    console.log('Creating todo', todoWithId);
+
+    return this.todos.doc(todoWithId.id).set(todoWithId);
   }
 
   @action
   public updateTodo(todo: Todo) {
     this.ensureObjectId(todo);
     console.log('Updating todo', todo);
-    return request({
-      requestType: 'updateTodo',
-      payload: todo
-    });
+    return this.todos.doc(todo.id).update(todo);
   }
 
   @action
@@ -54,14 +35,12 @@ class FirestoreService extends FirestoreObservableFactory {
     this.ensureObjectId(todo);
     console.log('Archiving todo', todo);
 
-    return request({
-      requestType: 'archiveTodo',
-      payload: todo
-    });
+    return this.todos.doc(todo.id).delete();
   }
 
   constructor(name: string) {
     super(name);
+    this.todos = firebase.firestore().collection('todos');
   }
 
   private ensureObjectId(object: WithId) {

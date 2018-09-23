@@ -13,7 +13,7 @@ import {
 import * as Hammer from 'react-hammerjs';
 import { inject } from '../../node_modules/mobx-react';
 import { FirestoreService } from '../services/firestore';
-import { AuthStore } from '../services/auth';
+import { AuthService } from '../services/auth';
 
 const DIRECTION_NONE = 1;
 const DIRECTION_LEFT = 2;
@@ -33,7 +33,7 @@ interface Props {
   isAddedToMyDay: boolean;
   isCurrentSprint: boolean;
   FirestoreService?: FirestoreService;
-  auth?: AuthStore;
+  AuthService?: AuthService;
 }
 
 interface State {
@@ -46,7 +46,7 @@ interface State {
   overrideTodoState?: 'complete' | 'incomplete';
 }
 
-@inject('FirestoreService', 'auth')
+@inject('FirestoreService', 'AuthService')
 class TodoView extends React.Component<Props, State> {
   public state = {
     isReorderEnabled: false,
@@ -140,7 +140,7 @@ class TodoView extends React.Component<Props, State> {
       willChange: 'transform'
     };
 
-    const { currentSprintId, backlogId } = this.props.auth!.user!;
+    const { currentSprintId, backlogId } = this.props.AuthService!.user!;
     const isInCurrentSprint = this.props.todo.sprintId === currentSprintId;
     const isInBacklog = this.props.todo.sprintId === backlogId;
 

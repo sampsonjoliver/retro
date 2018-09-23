@@ -1,28 +1,28 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 
-import { AuthStore, AuthState } from '../services/auth';
+import { AuthService, AuthState } from '../services/auth';
 
 interface Props {
-  auth?: AuthStore;
+  AuthService?: AuthService;
   children: (
     args: {
       authState: AuthState;
       user: RetroUser;
-      authService: AuthStore;
+      authService: AuthService;
     }
   ) => React.ReactNode;
 }
 
 const Auth = (props: Props) => {
   return props.children({
-    authState: props.auth!.authState,
-    user: props.auth!.user,
-    authService: props.auth!
+    authState: props.AuthService!.authState,
+    user: props.AuthService!.user,
+    authService: props.AuthService!
   });
 };
 
-const WithAuth = inject('auth')(
+const WithAuth = inject('AuthService')(
   observer(Auth as React.StatelessComponent<Props>)
 );
 
