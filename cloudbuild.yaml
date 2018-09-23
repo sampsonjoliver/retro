@@ -1,15 +1,12 @@
 steps:
   - name: gcr.io/cloud-builders/git
     args: ['clone', 'https://github.com/sampsonjoliver/retro']
-  - name: node:10.10.0
-    entrypoint: yarn
+  - name: gcr.io/cloud-builders/yarn
     args: ['install']
     dir: './${_DIR}'
-  - name: node:10.10.0
-    entrypoint: yarn
+  - name: gcr.io/cloud-builders/yarn
     args: ['build']
     dir: './${_DIR}'
-  - name: node:10.10.0
-    entrypoint: yarn
-    args: ['firebase deploy --token ${_DEPLOY_TOKEN}']
+  - name: gcr.io/cloud-builders/yarn
+    args: ['deploy', '--token ${_DEPLOY_TOKEN}']
     dir: './${_DIR}'
