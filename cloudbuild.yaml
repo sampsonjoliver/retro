@@ -9,5 +9,7 @@ steps:
     dir: './${_DIR}'
   - name: gcr.io/cloud-builders/yarn
     entrypoint: 'yarn'
-    args: ['deploy --token ${_DEPLOY_TOKEN}']
+    args: ['deploy']
     dir: './${_DIR}'
+    env:
+      - FIREBASE_TOKEN=${_DEPLOY_TOKEN}
