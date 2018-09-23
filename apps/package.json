@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-ui/core": "^3.0.3",
     "@types/uuid": "^3.4.4",
+    "date-fns": "^1.29.0",
     "firebase": "^5.5.0",
     "mobx": "^5.1.1",
     "mobx-react": "^5.2.8",
