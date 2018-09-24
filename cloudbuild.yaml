@@ -4,6 +4,15 @@ steps:
   - name: gcr.io/cloud-builders/yarn
     args: ['install']
     dir: './${_DIR}'
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - kms
+      - decrypt
+      - --ciphertext-file=./${_DIR}/.env.prod.enc
+      - --plaintext-file=./${_DIR}/.env
+      - --location=global
+      - --keyring=retro-kms
+      - --key=prod
   - name: gcr.io/cloud-builders/yarn
     args: ['build']
     dir: './${_DIR}'
@@ -11,5 +20,10 @@ steps:
     entrypoint: 'yarn'
     args: ['deploy']
     dir: './${_DIR}'
-    env:
-      - FIREBASE_TOKEN=${_DEPLOY_TOKEN}
+    secretEnv: ['FIREBASE_TOKEN']
+
+secrets:
+  - kmsKeyName: projects/retro-e4947/locations/global/keyRings/retro-kms/cryptoKeys/prod
+
+    secretEnv:
+      FIREBASE_TOKEN: CiQA3e0LJJ37X3TEMbQ3rQ6ZeYji6ppec1jPEYPcz3imfjMtNTwSVgCf1+vCg0OCV0ODd/htt4nv64IQ2InmPzCm8wTkPT9SYxPEmMfz9gjFSkdI0gMdIzaapfjI1NZBjFOgTVS//95BRQ3BmIu6MrBG/sIQWPEdU3V5LW3w
