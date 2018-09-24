@@ -12,6 +12,7 @@ steps:
     entrypoint: 'yarn'
     args: ['deploy']
     secretEnv: ['FIREBASE_TOKEN']
+    dir: './functions'
   - name: gcr.io/cloud-builders/yarn
     args: ['deploy:firestore']
     secretEnv: ['FIREBASE_TOKEN']
