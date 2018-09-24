@@ -1,10 +1,10 @@
 {
   "functions": {
     "source": "lib",
-    "predeploy": [
-      "yarn lint",
-      "yarn build",
-      "yarn copy-deps"
-    ]
+    "predeploy": ["yarn lint", "yarn build", "yarn copy-deps"]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

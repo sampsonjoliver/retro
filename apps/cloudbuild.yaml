@@ -3,23 +3,20 @@ steps:
     args: ['clone', 'https://github.com/sampsonjoliver/retro']
   - name: gcr.io/cloud-builders/yarn
     args: ['install']
-    dir: './${_DIR}'
   - name: gcr.io/cloud-builders/gcloud
     args:
       - kms
       - decrypt
-      - --ciphertext-file=./${_DIR}/.env.prod.enc
-      - --plaintext-file=./${_DIR}/.env
+      - --ciphertext-file=.env.prod.enc
+      - --plaintext-file=.env
       - --location=global
       - --keyring=retro-kms
       - --key=prod
   - name: gcr.io/cloud-builders/yarn
     args: ['build']
-    dir: './${_DIR}'
   - name: gcr.io/cloud-builders/yarn
     entrypoint: 'yarn'
     args: ['deploy']
-    dir: './${_DIR}'
     secretEnv: ['FIREBASE_TOKEN']
 
 secrets:

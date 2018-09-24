@@ -7,8 +7,10 @@
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
     "deploy": "firebase deploy --only functions:backend",
+    "deploy:firestore": "firebase deploy --only firestore",
     "logs": "firebase functions:log",
-    "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"lib\" -C"
+    "copy-deps":
+      "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"lib\" -C"
   },
   "main": "index.js",
   "dependencies": {
