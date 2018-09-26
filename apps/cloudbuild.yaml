@@ -23,8 +23,9 @@ steps:
     secretEnv: ['FIREBASE_TOKEN']
     dir: './apps'
 
+timeout: 600s
+
 secrets:
   - kmsKeyName: projects/retro-e4947/locations/global/keyRings/retro-kms/cryptoKeys/prod
-
     secretEnv:
       FIREBASE_TOKEN: CiQA3e0LJJ37X3TEMbQ3rQ6ZeYji6ppec1jPEYPcz3imfjMtNTwSVgCf1+vCg0OCV0ODd/htt4nv64IQ2InmPzCm8wTkPT9SYxPEmMfz9gjFSkdI0gMdIzaapfjI1NZBjFOgTVS//95BRQ3BmIu6MrBG/sIQWPEdU3V5LW3w
