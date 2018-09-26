@@ -8,6 +8,8 @@ steps:
   - name: gcr.io/cloud-builders/yarn
     args: ['test']
     dir: './apps'
+    env:
+      - 'CI=true'
 
   - name: gcr.io/cloud-builders/yarn
     args: ['install']
