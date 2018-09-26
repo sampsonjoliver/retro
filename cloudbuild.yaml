@@ -1,23 +1,21 @@
 steps:
   - name: gcr.io/cloud-builders/yarn
-    id: installApp
-    waitFor: ['-']
     args: ['install']
     dir: './apps'
   - name: gcr.io/cloud-builders/yarn
-    waitFor: 
-    - installApp
+    args: ['lint']
+    dir: './apps'
+  - name: gcr.io/cloud-builders/yarn
     args: ['test']
-    dir: './functions'
+    dir: './apps'
 
   - name: gcr.io/cloud-builders/yarn
-    id: installFuncs
-    waitFor: ['-']
     args: ['install']
     dir: './functions'
   - name: gcr.io/cloud-builders/yarn
-    waitFor: 
-    - installFuncs
+    args: ['lint']
+    dir: './functions'
+  - name: gcr.io/cloud-builders/yarn
     args: ['test']
     dir: './functions'
 
