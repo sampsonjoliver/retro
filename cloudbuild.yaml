@@ -1,0 +1,29 @@
+steps:
+  - name: gcr.io/cloud-builders/yarn
+    id: installApp
+    waitFor: ['-']
+    args: ['install']
+    dir: './apps'
+  - name: gcr.io/cloud-builders/yarn
+    waitFor: 
+    - installApp
+    args: ['test']
+    dir: './functions'
+
+  - name: gcr.io/cloud-builders/yarn
+    id: installFuncs
+    waitFor: ['-']
+    args: ['install']
+    dir: './functions'
+  - name: gcr.io/cloud-builders/yarn
+    waitFor: 
+    - installFuncs
+    args: ['test']
+    dir: './functions'
+
+timeout: 600s
+
+secrets:
+  - kmsKeyName: projects/retro-e4947/locations/global/keyRings/retro-kms/cryptoKeys/prod
+    secretEnv:
+      FIREBASE_TOKEN: CiQA3e0LJJ37X3TEMbQ3rQ6ZeYji6ppec1jPEYPcz3imfjMtNTwSVgCf1+vCg0OCV0ODd/htt4nv64IQ2InmPzCm8wTkPT9SYxPEmMfz9gjFSkdI0gMdIzaapfjI1NZBjFOgTVS//95BRQ3BmIu6MrBG/sIQWPEdU3V5LW3w
