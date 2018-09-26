@@ -5,9 +5,10 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
+    "lint": "tslint --project tsconfig.json",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "deploy": "yarn build && firebase deploy"
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@material-ui/core": "^3.0.3",
@@ -38,6 +39,7 @@
     "@types/react-router-dom": "^4.3.1",
     "create-react-app": "^1.5.2",
     "firebase-tools": "^4.2.1",
+    "prettier": "^1.14.3",
     "tslint-config-prettier": "^1.15.0",
     "tslint-react": "^3.6.0",
     "typescript": "^3.0.3"
