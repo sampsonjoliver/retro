@@ -8,7 +8,6 @@
     "lint": "tslint --project tsconfig.json",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "configure": "firebase deploy --only firestore",
     "deploy": "firebase deploy"
   },
   "dependencies": {
