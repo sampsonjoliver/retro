@@ -1,0 +1,31 @@
+steps:
+  - name: gcr.io/cloud-builders/git
+    args: ['clone', 'https://github.com/sampsonjoliver/retro']
+  - name: gcr.io/cloud-builders/yarn
+    args: ['install']
+    dir: './apps'
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - kms
+      - decrypt
+      - --ciphertext-file=.env.prod.enc
+      - --plaintext-file=.env
+      - --location=global
+      - --keyring=retro-kms
+      - --key=prod
+    dir: './apps'
+  - name: gcr.io/cloud-builders/yarn
+    args: ['build']
+    dir: './apps'
+  - name: gcr.io/cloud-builders/yarn
+    entrypoint: 'yarn'
+    args: ['deploy']
+    secretEnv: ['FIREBASE_TOKEN']
+    dir: './apps'
+
+timeout: 600s
+
+secrets:
+  - kmsKeyName: projects/retro-e4947/locations/global/keyRings/retro-kms/cryptoKeys/prod
+    secretEnv:
+      FIREBASE_TOKEN: CiQA3e0LJJ37X3TEMbQ3rQ6ZeYji6ppec1jPEYPcz3imfjMtNTwSVgCf1+vCg0OCV0ODd/htt4nv64IQ2InmPzCm8wTkPT9SYxPEmMfz9gjFSkdI0gMdIzaapfjI1NZBjFOgTVS//95BRQ3BmIu6MrBG/sIQWPEdU3V5LW3w

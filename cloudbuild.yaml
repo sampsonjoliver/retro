@@ -1,0 +1,24 @@
+steps:
+  - name: gcr.io/cloud-builders/yarn
+    args: ['install']
+    dir: './apps'
+  - name: gcr.io/cloud-builders/yarn
+    args: ['lint']
+    dir: './apps'
+  - name: gcr.io/cloud-builders/yarn
+    args: ['test']
+    dir: './apps'
+    env:
+      - 'CI=true'
+
+  - name: gcr.io/cloud-builders/yarn
+    args: ['install']
+    dir: './functions'
+  - name: gcr.io/cloud-builders/yarn
+    args: ['lint']
+    dir: './functions'
+  - name: gcr.io/cloud-builders/yarn
+    args: ['test']
+    dir: './functions'
+
+timeout: 600s
