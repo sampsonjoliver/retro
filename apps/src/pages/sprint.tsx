@@ -5,8 +5,17 @@ import { App } from '../components/App';
 import { TaskInput } from '../components/TaskInput';
 import { SprintList } from '../components/SprintList';
 import { WithRouter } from '../components/WithRouter';
+import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
+import { SprintRolloverButton } from '../components/SprintRolloverButton';
 
-class SprintPage extends React.Component {
+const styles = (theme: Theme) =>
+  createStyles({
+    taskInputBlock: {
+      minHeight: theme.spacing.unit * 10
+    }
+  });
+
+class SprintPage extends React.Component<WithStyles<typeof styles>> {
   public render() {
     return (
       <WithRouter>
@@ -14,11 +23,12 @@ class SprintPage extends React.Component {
           const sprintId = parse(router.location.search).id;
           return (
             <App title={sprintId}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <p>Index Page</p>
+              <>
+                <SprintRolloverButton />
                 <SprintList sprintId={sprintId} />
+                <div className={this.props.classes.taskInputBlock} />
                 <TaskInput sprintId={sprintId} />
-              </div>
+              </>
             </App>
           );
         }}
@@ -27,4 +37,5 @@ class SprintPage extends React.Component {
   }
 }
 
-export default SprintPage;
+const StyledSprintPage = withStyles(styles)(SprintPage);
+export default StyledSprintPage;

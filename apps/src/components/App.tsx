@@ -21,11 +21,11 @@ const styles = theme =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 'calc(100%)',
       zIndex: 1,
       overflow: 'hidden',
       position: 'relative',
       display: 'flex',
+      height: '100%',
       width: '100%'
     },
     appBar: {
@@ -54,7 +54,6 @@ const styles = theme =>
     content: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 3,
       display: 'flex',
       flexDirection: 'column'
     }

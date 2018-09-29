@@ -12,14 +12,22 @@ interface Props {
 
 const SprintList = (props: Props) => {
   const selector = (firestore: firebase.firestore.Firestore) => ({
-    [`todos-${props.sprintId!}`]: firestore.collection('todos').where('sprintId', '==', props.sprintId)
+    [`todos-${props.sprintId!}`]: firestore
+      .collection('todos')
+      .where('sprintId', '==', props.sprintId)
   });
 
   return (
-    <List>
+    <List
+      style={{
+        flexGrow: 1,
+        overflowY: 'auto'
+      }}
+    >
       <FirestoreQueryComponent selector={selector}>
-        {(todosResult) => {
-          const todos: FirestoreAutoObservable<Todo[]> = todosResult[`todos-${props.sprintId!}`]
+        {todosResult => {
+          const todos: FirestoreAutoObservable<Todo[]> =
+            todosResult[`todos-${props.sprintId!}`];
           if (todos.data) {
             return (
               <>

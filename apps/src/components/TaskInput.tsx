@@ -93,8 +93,8 @@ class TaskInputComponent extends React.Component<Props, State> {
         this.setState({ isCreatingTodo: false, isTodoCreated: true });
         setTimeout(() => {
           this.setState({ isCreatingTodo: false, isTodoCreated: false });
-        }, 2000);
-      }, 1500);
+        }, 1200);
+      }, 500);
     }
   }
 
@@ -111,6 +111,11 @@ class TaskInputComponent extends React.Component<Props, State> {
           }}
           value={this.state.todoName}
           onChange={this.handleChange}
+          onKeyUp={event => {
+            if (event.keyCode === 13) {
+              this.createTodo();
+            }
+          }}
         />
         <Button
           variant="fab"
