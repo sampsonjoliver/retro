@@ -1,3 +1,17 @@
 {
-  "indexes": []
+  "indexes": [
+    {
+      "collectionId": "sprints",
+      "fields": [
+        {
+          "fieldPath": "userId",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "endDate",
+          "mode": "DESCENDING"
+        }
+      ]
+    }
+  ]
 }

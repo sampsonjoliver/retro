@@ -1,7 +1,38 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+    function hasAuth() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isOwningUser() {
+      return hasAuth() && resource.data.userId == request.auth.uid;
+    }
+    
+    function isSelfAssigning() {
+      return hasAuth() && request.resource.data.userId == request.auth.uid;
+    }
+    
+    function sprintExists(sprintId) {
+    	return exists(/databases/$(database)/documents/sprints/$(sprintId));
+    }
+ 
+ 		match /requests/{document=**} {
+    	allow read, write
+    }
+    match /users/{userId} {
+      allow read, update, delete: if hasAuth() && request.auth.uid == userId;
+      allow create: if hasAuth();
+    }
+    match /sprints/{sprintId} {
+      allow create: if isSelfAssigning();
+      allow update: if isOwningUser() && isSelfAssigning();
+      allow get, list, delete: if isOwningUser();
+    }
+    match /todos/{todoId} {
+      allow create: if isSelfAssigning() && sprintExists(request.resource.data.sprintId);
+      allow update: if isOwningUser() && sprintExists(request.resource.data.sprintId);
+      allow list;
+      allow get, delete: if isOwningUser() || sprintBelongsToUser(resource.data.sprintId);
     }
   }
 }
