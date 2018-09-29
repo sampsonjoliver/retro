@@ -10,9 +10,18 @@ import { SprintRolloverButton } from '../components/SprintRolloverButton';
 
 const styles = (theme: Theme) =>
   createStyles({
+    sprintList: {
+      flexGrow: 1,
+      overflowY: 'auto'
+    },
     taskInputBlock: {
       minHeight: theme.spacing.unit * 10
-    }
+    },
+    sprintHeader: {
+      width: '100%',
+      padding: theme.spacing.unit
+    },
+    rolloverButton: {}
   });
 
 class SprintPage extends React.Component<WithStyles<typeof styles>> {
@@ -24,8 +33,15 @@ class SprintPage extends React.Component<WithStyles<typeof styles>> {
           return (
             <App title={sprintId}>
               <>
-                <SprintRolloverButton />
-                <SprintList sprintId={sprintId} />
+                <div className={this.props.classes.sprintHeader}>
+                  <SprintRolloverButton
+                    className={this.props.classes.rolloverButton}
+                  />
+                </div>
+                <SprintList
+                  sprintId={sprintId}
+                  className={this.props.classes.sprintList}
+                />
                 <div className={this.props.classes.taskInputBlock} />
                 <TaskInput sprintId={sprintId} />
               </>

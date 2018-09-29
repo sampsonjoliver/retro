@@ -5,29 +5,25 @@ import {
   FirestoreAutoObservable
 } from 'react-firestore-mobx-bindings';
 import { TodoView } from '../components/Todo';
+import { ListProps } from '@material-ui/core/List';
 
-interface Props {
+interface Props extends ListProps {
   sprintId?: string;
 }
 
-const SprintList = (props: Props) => {
+const SprintList = ({ sprintId, ...rest }: Props) => {
   const selector = (firestore: firebase.firestore.Firestore) => ({
-    [`todos-${props.sprintId!}`]: firestore
+    [`todos-${sprintId!}`]: firestore
       .collection('todos')
-      .where('sprintId', '==', props.sprintId)
+      .where('sprintId', '==', sprintId)
   });
 
   return (
-    <List
-      style={{
-        flexGrow: 1,
-        overflowY: 'auto'
-      }}
-    >
+    <List {...rest}>
       <FirestoreQueryComponent selector={selector}>
         {todosResult => {
           const todos: FirestoreAutoObservable<Todo[]> =
-            todosResult[`todos-${props.sprintId!}`];
+            todosResult[`todos-${sprintId!}`];
           if (todos.data) {
             return (
               <>
