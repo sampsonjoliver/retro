@@ -5,7 +5,7 @@ import {
   FirestoreQueryComponent,
   FirestoreAutoObservable
 } from 'react-firestore-mobx-bindings';
-import { DrawerItem, UserDrawerItem } from './DrawerItem';
+import { DrawerItem, UserDrawerItem, SprintDrawerItem } from './DrawerItem';
 import { WithAuth } from './WithAuth';
 
 const styles: { [key: string]: React.CSSProperties } = {
@@ -53,10 +53,10 @@ const AppDrawerMenu = () => {
 
                   const listItems = otherSprints.map(sprint => {
                     return (
-                      <DrawerItem
+                      <SprintDrawerItem
                         key={sprint.id}
-                        text={sprint.name}
-                        icon="calendar_view_day"
+                        sprint={sprint}
+                        isCurrentSprint={sprint.id === currentSprintId}
                         linkTo={{
                           pathname: '/sprint',
                           search: `?id=${sprint.id}`

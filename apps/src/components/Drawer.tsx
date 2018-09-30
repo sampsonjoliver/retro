@@ -47,7 +47,7 @@ class AppDrawerComponent extends React.Component<Props, {}> {
           >
             {this.props.children}
           </Drawer>
-        </Hidden>{' '}
+        </Hidden>
       </>
     );
   }
