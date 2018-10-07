@@ -10,35 +10,21 @@ import {
   DialogActions
 } from '@material-ui/core';
 
-interface State {
-  isRollingOver: boolean;
-}
-
 interface Props {
   SprintService?: SprintService;
 }
 
 @inject('SprintService')
 @observer
-class SprintRolloverDialog extends React.Component<Props, State> {
-  public state = {
-    isRollingOver: false
-  };
-
-  public handleClose = () => {
-    this.setState({ isRollingOver: false });
-  };
-
+class SprintEndedDialog extends React.Component<Props> {
   public startRollover = () => {
     this.props.SprintService!.rolloverSprint();
-    this.setState({ isRollingOver: true });
   };
 
   public render() {
     return (
       <Dialog
         open={this.props.SprintService!.isCurrentSprintEnded}
-        onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -52,7 +38,7 @@ class SprintRolloverDialog extends React.Component<Props, State> {
         </DialogContent>
         <DialogActions>
           <Button
-            disabled={this.state.isRollingOver}
+            disabled={this.props.SprintService!.isSprintRollingOver}
             onClick={this.startRollover}
             color="primary"
             autoFocus
@@ -65,4 +51,4 @@ class SprintRolloverDialog extends React.Component<Props, State> {
   }
 }
 
-export { SprintRolloverDialog };
+export { SprintEndedDialog };

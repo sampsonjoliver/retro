@@ -1,29 +1,23 @@
 import * as React from 'react';
 
 import { SprintService as SprintServiceType } from '../services/sprint';
-import { Icon, Button } from '@material-ui/core';
-import { ButtonProps } from '@material-ui/core/Button';
+import { Icon, Button, Tooltip, IconButton } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 
-interface Props extends ButtonProps {
+interface Props {
   SprintService?: SprintServiceType;
+  isCurrentSprintEnded: boolean;
 }
 
 const SprintRolloverButton = (props: Props) => {
-  const { SprintService, ...rest } = props;
+  const { SprintService, isCurrentSprintEnded } = props;
 
   return (
-    <Button
-      color={
-        props.SprintService!.isCurrentSprintEnded ? 'secondary' : 'default'
-      }
-      variant="extendedFab"
-      onClick={() => props.SprintService!.rolloverSprint()}
-      {...rest}
-    >
-      <Icon>loop</Icon>
-      Rollover
-    </Button>
+    <Tooltip id="tooltip" title="Click the things to rollover the sprint">
+      <IconButton onClick={() => SprintService!.rolloverSprint()}>
+        <Icon color={isCurrentSprintEnded ? 'secondary' : 'default'}>loop</Icon>
+      </IconButton>
+    </Tooltip>
   );
 };
 

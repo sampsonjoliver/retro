@@ -20,8 +20,7 @@ const styles = (theme: Theme) =>
     sprintHeader: {
       width: '100%',
       padding: theme.spacing.unit
-    },
-    rolloverButton: {}
+    }
   });
 
 class SprintPage extends React.Component<WithStyles<typeof styles>> {
@@ -33,11 +32,6 @@ class SprintPage extends React.Component<WithStyles<typeof styles>> {
           return (
             <App title={sprintId}>
               <>
-                <div className={this.props.classes.sprintHeader}>
-                  <SprintRolloverButton
-                    className={this.props.classes.rolloverButton}
-                  />
-                </div>
                 <SprintList
                   sprintId={sprintId}
                   className={this.props.classes.sprintList}

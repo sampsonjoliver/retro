@@ -6,12 +6,12 @@ import {
   ListItemText,
   ListItemAvatar,
   Avatar,
-  ListItemSecondaryAction,
-  Tooltip,
-  IconButton
+  ListItemSecondaryAction
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Location } from 'history';
+import { isPast } from 'date-fns';
+import { SprintRolloverButton } from './SprintRolloverButton';
 
 interface DrawerItemProps {
   text: string;
@@ -61,22 +61,24 @@ export const UserDrawerItem = (props: UserDrawerItemProps) => (
   </Link>
 );
 
-export const SprintDrawerItem = (props: SprintDrawerItemProps) => (
-  <Link to={props.linkTo}>
-    <ListItem button>
-      <ListItemIcon>
-        <Icon>calendar_view_day</Icon>
-      </ListItemIcon>
-      <ListItemText primary={props.sprint.name} />
-      {props.isCurrentSprint && (
-        <ListItemSecondaryAction>
-          <Tooltip id="tooltip" title="Click the things to rollover the sprint">
-            <IconButton>
-              <Icon>loop</Icon>
-            </IconButton>
-          </Tooltip>
-        </ListItemSecondaryAction>
-      )}
-    </ListItem>
-  </Link>
-);
+export const SprintDrawerItem = (props: SprintDrawerItemProps) => {
+  const isSprintPast = isPast(props.sprint.endDate.toDate());
+  const { isCurrentSprint } = props;
+  return (
+    <Link to={props.linkTo}>
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>calendar_view_day</Icon>
+        </ListItemIcon>
+        <ListItemText primary={props.sprint.name} />
+        {isCurrentSprint && (
+          <ListItemSecondaryAction>
+            <SprintRolloverButton
+              isCurrentSprintEnded={isCurrentSprint && isSprintPast}
+            />
+          </ListItemSecondaryAction>
+        )}
+      </ListItem>
+    </Link>
+  );
+};

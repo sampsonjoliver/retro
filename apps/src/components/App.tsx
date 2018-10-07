@@ -15,7 +15,8 @@ import { drawerWidth } from '../consts';
 
 import AuthStateAvatar from './Avatar';
 import { AuthProtected } from './AuthProtected';
-import { SprintRolloverDialog } from './SprintRolloverDialog';
+import { SprintEndedDialog } from './SprintEndedDialog';
+import { SprintRolloverProgressDialog } from './SprintRolloverProgressDialog';
 
 const styles = theme =>
   createStyles({
@@ -112,7 +113,8 @@ class AppComponent extends React.Component<Props, State> {
             </AppDrawer>
             <main className={classes.content}>
               <div className={classes.toolbar} />
-              <SprintRolloverDialog />
+              <SprintEndedDialog />
+              <SprintRolloverProgressDialog />
               {this.props.children}
             </main>
           </AuthProtected>
