@@ -10,20 +10,10 @@ import {
   Menu,
   MenuItem
 } from '@material-ui/core';
-import * as Hammer from 'react-hammerjs';
 import { inject } from '../../node_modules/mobx-react';
 import { FirestoreService } from '../services/firestore';
 import { AuthService } from '../services/auth';
-
-const DIRECTION_NONE = 1;
-const DIRECTION_LEFT = 2;
-const DIRECTION_RIGHT = 4;
-const DIRECTION_UP = 8;
-const DIRECTION_DOWN = 16;
-
-const DIRECTION_HORIZONTAL = 6;
-const DIRECTION_VERTICAL = 24;
-const DIRECTION_ALL = 30;
+import { TodoService } from 'src/services/todo';
 
 const TODO_UPDATE_DELAY = 1000;
 
@@ -32,7 +22,7 @@ interface Props {
   sprint?: Sprint;
   isAddedToMyDay: boolean;
   isCurrentSprint: boolean;
-  FirestoreService?: FirestoreService;
+  TodoService?: TodoService;
   AuthService?: AuthService;
 }
 
@@ -46,7 +36,7 @@ interface State {
   overrideTodoState?: 'complete' | 'incomplete';
 }
 
-@inject('FirestoreService', 'AuthService')
+@inject('TodoService', 'AuthService')
 class TodoView extends React.Component<Props, State> {
   public state = {
     isReorderEnabled: false,
@@ -92,15 +82,12 @@ class TodoView extends React.Component<Props, State> {
   }
 
   public deleteTodo() {
-    this.props.FirestoreService!.archiveTodo(this.props.todo);
+    this.props.TodoService!.archiveTodo(this.props.todo);
     this.closeMenu();
   }
 
   public moveTodoToSprint(sprintId: string) {
-    this.props.FirestoreService!.updateTodo({
-      ...this.props.todo,
-      sprintId
-    });
+    this.props.TodoService!.updateTodo({ ...this.props.todo, sprintId });
     this.closeMenu();
   }
 
@@ -115,7 +102,7 @@ class TodoView extends React.Component<Props, State> {
         : 'complete';
 
     const timeout = setTimeout(() => {
-      this.props.FirestoreService!.updateTodo({
+      this.props.TodoService!.updateTodo({
         ...this.props.todo,
         status: newStatus
       });

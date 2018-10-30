@@ -3,7 +3,6 @@ import { Provider as MobxProvider } from 'mobx-react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 import './App.css';
-import logo from './logo.svg';
 
 import { initializeApp } from './services/firebase';
 import { FirestoreService } from './services/firestore';
@@ -13,11 +12,13 @@ import LoginPage from './pages/login';
 import IndexPage from './pages';
 import SprintPage from './pages/sprint';
 import { SprintService } from './services/sprint';
+import { TodoService } from './services/todo';
 
 initializeApp();
 const authService = initStore();
 const firestoreService = new FirestoreService('FirestoreService');
 const sprintService = new SprintService(firestoreService, authService);
+const todoService = new TodoService();
 
 const theme = createMuiTheme({});
 
@@ -30,6 +31,7 @@ class App extends React.Component {
           FirestoreService={firestoreService}
           AuthService={authService}
           SprintService={sprintService}
+          TodoService={todoService}
         >
           <BrowserRouter>
             <Switch>

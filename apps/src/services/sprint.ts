@@ -33,6 +33,15 @@ class SprintService {
     });
   }
 
+  public getSprintStore(sprintId: string) {
+    return this.firestoreService.getOrCreateStore(
+      `sprint-${sprintId}`,
+      firestore()
+        .collection('sprints')
+        .doc(sprintId)
+    );
+  }
+
   @action
   public async rolloverSprint() {
     const userId = this.authService.user.uid;

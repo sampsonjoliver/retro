@@ -7,14 +7,13 @@ import {
   createStyles,
   WithStyles,
   Button,
-  CircularProgress,
   Theme
 } from '@material-ui/core';
 import green from '@material-ui/core/colors/green';
 import { inject, observer } from 'mobx-react';
 import { drawerWidth } from '../consts';
-import { FirestoreService } from '../services/firestore';
 import { AuthService, AuthState } from '../services/auth';
+import { TodoService } from 'src/services/todo';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -38,33 +37,31 @@ const styles = (theme: Theme) =>
       '&:hover': {
         backgroundColor: green[700]
       }
-    },
-    fabProgress: {
-      position: 'fixed',
-      bottom: '10px',
-      right: '18px',
-      zIndex: 1
     }
   });
 
 interface Props extends WithStyles<typeof styles> {
-  FirestoreService?: FirestoreService;
+  TodoService?: TodoService;
   AuthService?: AuthService;
   sprintId?: string;
 }
 
 interface State {
   todoName: string;
-  isCreatingTodo: boolean;
   isTodoCreated: boolean;
 }
 
-@inject('FirestoreService', 'AuthService')
+const onEnter = (func: () => void) => (event: React.KeyboardEvent) => {
+  if (event.keyCode === 13) {
+    return func();
+  }
+};
+
+@inject('TodoService', 'AuthService')
 @observer
 class TaskInputComponent extends React.Component<Props, State> {
   public state = {
     todoName: '',
-    isCreatingTodo: false,
     isTodoCreated: false
   };
 
@@ -76,7 +73,7 @@ class TaskInputComponent extends React.Component<Props, State> {
 
   public createTodo() {
     if (this.props.AuthService!.authState === AuthState.signedIn) {
-      this.props.FirestoreService!.createTodo({
+      this.props.TodoService!.createTodo({
         sprintId:
           this.props.sprintId || this.props.AuthService!.user!.currentSprintId!,
         userId: this.props.AuthService!.user!.uid!,
@@ -86,15 +83,12 @@ class TaskInputComponent extends React.Component<Props, State> {
 
       this.setState({
         todoName: '',
-        isCreatingTodo: true
+        isTodoCreated: true
       });
 
       setTimeout(() => {
-        this.setState({ isCreatingTodo: false, isTodoCreated: true });
-        setTimeout(() => {
-          this.setState({ isCreatingTodo: false, isTodoCreated: false });
-        }, 1200);
-      }, 500);
+        this.setState({ isTodoCreated: false });
+      }, 1200);
     }
   }
 
@@ -111,11 +105,7 @@ class TaskInputComponent extends React.Component<Props, State> {
           }}
           value={this.state.todoName}
           onChange={this.handleChange}
-          onKeyUp={event => {
-            if (event.keyCode === 13) {
-              this.createTodo();
-            }
-          }}
+          onKeyUp={onEnter(() => this.createTodo())}
         />
         <Button
           variant="fab"
@@ -124,12 +114,6 @@ class TaskInputComponent extends React.Component<Props, State> {
         >
           <Icon>{this.state.isTodoCreated ? 'check' : 'add'}</Icon>
         </Button>
-        {this.state.isCreatingTodo && (
-          <CircularProgress
-            size={68}
-            className={this.props.classes.fabProgress}
-          />
-        )}
       </Paper>
     );
   }
