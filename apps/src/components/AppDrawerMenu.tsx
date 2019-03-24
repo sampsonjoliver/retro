@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { Divider, List, CircularProgress } from '@material-ui/core';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
-import {
-  FirestoreQueryComponent,
-  FirestoreAutoObservable
-} from 'react-firestore-mobx-bindings';
 import { DrawerItem, UserDrawerItem, SprintDrawerItem } from './DrawerItem';
-import { WithAuth } from './WithAuth';
+import { useAuth } from 'src/utils/useAuthHook';
+import { firestore, auth } from 'firebase';
 
 const styles: { [key: string]: React.CSSProperties } = {
   drawer: {
@@ -17,105 +15,101 @@ const styles: { [key: string]: React.CSSProperties } = {
   }
 };
 
+const AppDrawerMenuList = (props: {
+  uid: string;
+  currentSprintId: string;
+  backlogId: string;
+}) => {
+  const { value } = useCollection(
+    firestore()
+      .collection('sprints')
+      .where('userId', '==', props.uid)
+      .orderBy('endDate', 'desc')
+  );
+
+  if (value) {
+    const sprints = value.docs.map(doc => doc.data() as Sprint);
+    const currentSprint = sprints.find(
+      sprint => sprint.id === props.currentSprintId
+    );
+    const backlog = sprints.find(sprint => sprint.id === props.backlogId);
+    const otherSprints = sprints.filter(
+      sprint => sprint.id !== props.backlogId
+    );
+
+    const listItems = otherSprints.map(sprint => {
+      return (
+        <SprintDrawerItem
+          key={sprint.id}
+          sprint={sprint}
+          isCurrentSprint={sprint.id === props.currentSprintId}
+          linkTo={{
+            pathname: '/sprint',
+            search: `?id=${sprint.id}`
+          }}
+        />
+      );
+    });
+
+    const currentSprintComponent = currentSprint && (
+      <DrawerItem
+        text={`Current: ${currentSprint.name}`}
+        icon="wb_sunny"
+        linkTo={{
+          pathname: '/sprint',
+          search: `?id=${currentSprint.id}`
+        }}
+      />
+    );
+
+    const backlogComponent = backlog && (
+      <DrawerItem
+        text={backlog.name}
+        icon="list_alt"
+        linkTo={{
+          pathname: '/sprint',
+          search: `?id=${backlog.id}`
+        }}
+      />
+    );
+
+    return (
+      <>
+        {currentSprintComponent}
+        {backlogComponent}
+        <Divider />
+        {listItems}
+      </>
+    );
+  }
+
+  return <CircularProgress />;
+};
+
 const AppDrawerMenu = () => {
+  const { user } = useAuth(auth(), firestore());
+
   return (
-    <WithAuth>
-      {({ user }) => {
-        const { uid, currentSprintId, backlogId } = user;
-
-        const selector = (firestore: firebase.firestore.Firestore) => ({
-          sprints: firestore
-            .collection('sprints')
-            .where('userId', '==', uid)
-            .orderBy('endDate', 'desc')
-        });
-
-        return (
-          <List style={styles.drawer}>
-            <UserDrawerItem linkTo={{ pathname: '/user' }} text="You" />
-
-            <FirestoreQueryComponent selector={selector}>
-              {({
-                sprints
-              }: {
-                sprints: FirestoreAutoObservable<Sprint[]>;
-              }) => {
-                if (sprints.data) {
-                  const currentSprint = sprints.data.find(
-                    sprint => sprint.id === currentSprintId
-                  );
-                  const backlog = sprints.data.find(
-                    sprint => sprint.id === backlogId
-                  );
-                  const otherSprints = sprints.data.filter(
-                    sprint => sprint.id !== backlogId
-                  );
-
-                  const listItems = otherSprints.map(sprint => {
-                    return (
-                      <SprintDrawerItem
-                        key={sprint.id}
-                        sprint={sprint}
-                        isCurrentSprint={sprint.id === currentSprintId}
-                        linkTo={{
-                          pathname: '/sprint',
-                          search: `?id=${sprint.id}`
-                        }}
-                      />
-                    );
-                  });
-
-                  const currentSprintComponent = currentSprint && (
-                    <DrawerItem
-                      text={`Current: ${currentSprint.name}`}
-                      icon="wb_sunny"
-                      linkTo={{
-                        pathname: '/sprint',
-                        search: `?id=${currentSprint.id}`
-                      }}
-                    />
-                  );
-
-                  const backlogComponent = backlog && (
-                    <DrawerItem
-                      text={backlog.name}
-                      icon="list_alt"
-                      linkTo={{
-                        pathname: '/sprint',
-                        search: `?id=${backlog.id}`
-                      }}
-                    />
-                  );
-
-                  return (
-                    <>
-                      {currentSprintComponent}
-                      {backlogComponent}
-                      <Divider />
-                      {listItems}
-                    </>
-                  );
-                } else {
-                  return <CircularProgress />;
-                }
-              }}
-            </FirestoreQueryComponent>
-            <Divider style={{ flex: 1, backgroundColor: '#ffffff' }} />
-            <Divider />
-            <DrawerItem
-              text="Settings"
-              icon="settings"
-              linkTo={{ pathname: '/setting' }}
-            />
-            <DrawerItem
-              text="Help"
-              icon="help"
-              linkTo={{ pathname: '/about' }}
-            />
-          </List>
-        );
-      }}
-    </WithAuth>
+    <List style={styles.drawer}>
+      <UserDrawerItem linkTo={{ pathname: '/user' }} text="You" />
+      {user ? (
+        <AppDrawerMenuList
+          uid={user.uid}
+          backlogId={user.backlogId}
+          currentSprintId={user.currentSprintId}
+        />
+      ) : (
+        <CircularProgress />
+      )}
+      <Divider style={{ flex: 1, backgroundColor: '#ffffff' }} />
+      <Divider />
+      <DrawerItem
+        text="Settings"
+        icon="settings"
+        linkTo={{ pathname: '/setting' }}
+      />
+      <DrawerItem text="Help" icon="help" linkTo={{ pathname: '/about' }} />
+    </List>
   );
 };
 

@@ -9,10 +9,10 @@ import { FirestoreService } from './services/firestore';
 import { initStore } from './services/auth';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/login';
-import IndexPage from './pages';
 import SprintPage from './pages/sprint';
 import { SprintService } from './services/sprint';
 import { TodoService } from './services/todo';
+import { WelcomePage } from './pages/welcome';
 
 initializeApp();
 const authService = initStore();
@@ -35,7 +35,7 @@ class App extends React.Component {
         >
           <BrowserRouter>
             <Switch>
-              <Route exact path="/" render={() => <IndexPage />} />
+              <Route exact path="/" render={() => <WelcomePage />} />
               <Route exact path="/login" render={() => <LoginPage />} />
               <Route exact path="/sprint" render={() => <SprintPage />} />
             </Switch>
