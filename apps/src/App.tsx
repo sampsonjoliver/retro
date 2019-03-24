@@ -7,12 +7,14 @@ import './App.css';
 import { initializeApp } from './services/firebase';
 import { FirestoreService } from './services/firestore';
 import { initStore } from './services/auth';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import LoginPage from './pages/login';
 import SprintPage from './pages/sprint';
 import { SprintService } from './services/sprint';
 import { TodoService } from './services/todo';
 import { WelcomePage } from './pages/welcome';
+import { AuthProvider } from './context/auth';
+import { Route } from './components/Route';
 
 initializeApp();
 const authService = initStore();
@@ -33,13 +35,20 @@ class App extends React.Component {
           SprintService={sprintService}
           TodoService={todoService}
         >
-          <BrowserRouter>
-            <Switch>
-              <Route exact path="/" render={() => <WelcomePage />} />
-              <Route exact path="/login" render={() => <LoginPage />} />
-              <Route exact path="/sprint" render={() => <SprintPage />} />
-            </Switch>
-          </BrowserRouter>
+          <AuthProvider>
+            <BrowserRouter>
+              <Switch>
+                <Route exact path="/" render={() => <WelcomePage />} />
+                <Route exact path="/login" render={() => <LoginPage />} />
+                <Route
+                  exact
+                  path="/sprint"
+                  requireAuth={true}
+                  render={() => <SprintPage />}
+                />
+              </Switch>
+            </BrowserRouter>
+          </AuthProvider>
         </MobxProvider>
       </MuiThemeProvider>
     );

@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 import { Typography } from '@material-ui/core';
-import { useAuth } from 'src/utils/useAuthHook';
-import { auth, firestore } from 'firebase';
-import { WithRouter } from 'src/components/WithRouter';
+
+import { WithRouter } from '../components/WithRouter';
+import { AuthContext } from 'src/context/auth';
 
 const Spinner1 = styled.div`
   width: 100%;
@@ -111,7 +111,7 @@ const LoadingScreen = () => (
 );
 
 const WelcomePage = () => {
-  const { isLoading, user } = useAuth(auth(), firestore());
+  const { isLoading, user } = React.useContext(AuthContext);
 
   return (
     <WithRouter>

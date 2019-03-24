@@ -14,7 +14,6 @@ import { AppDrawerMenu } from './AppDrawerMenu';
 import { drawerWidth } from '../consts';
 
 import AuthStateAvatar from './Avatar';
-import { AuthProtected } from './AuthProtected';
 import { SprintEndedDialog } from './SprintEndedDialog';
 import { SprintRolloverProgressDialog } from './SprintRolloverProgressDialog';
 
@@ -83,41 +82,39 @@ class AppComponent extends React.Component<Props, State> {
     return (
       <main>
         <div className={classes.root}>
-          <AuthProtected>
-            <AppBar className={classes.appBar}>
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={this.handleDrawerToggle}
-                  className={classes.menuButton}
-                >
-                  <Icon>menu</Icon>
-                </IconButton>
-                <Typography
-                  variant="title"
-                  color="inherit"
-                  noWrap
-                  className={classes.flex}
-                >
-                  {this.props.title}
-                </Typography>
-                <AuthStateAvatar />
-              </Toolbar>
-            </AppBar>
-            <AppDrawer
-              mobileOpen={this.state.mobileOpen}
-              onClose={() => this.setState({ mobileOpen: false })}
-            >
-              <AppDrawerMenu />
-            </AppDrawer>
-            <main className={classes.content}>
-              <div className={classes.toolbar} />
-              <SprintEndedDialog />
-              <SprintRolloverProgressDialog />
-              {this.props.children}
-            </main>
-          </AuthProtected>
+          <AppBar className={classes.appBar}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={this.handleDrawerToggle}
+                className={classes.menuButton}
+              >
+                <Icon>menu</Icon>
+              </IconButton>
+              <Typography
+                variant="title"
+                color="inherit"
+                noWrap
+                className={classes.flex}
+              >
+                {this.props.title}
+              </Typography>
+              <AuthStateAvatar />
+            </Toolbar>
+          </AppBar>
+          <AppDrawer
+            mobileOpen={this.state.mobileOpen}
+            onClose={() => this.setState({ mobileOpen: false })}
+          >
+            <AppDrawerMenu />
+          </AppDrawer>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <SprintEndedDialog />
+            <SprintRolloverProgressDialog />
+            {this.props.children}
+          </main>
         </div>
       </main>
     );

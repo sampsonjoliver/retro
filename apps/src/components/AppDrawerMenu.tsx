@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Divider, List, CircularProgress } from '@material-ui/core';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { firestore } from 'firebase';
 
 import { DrawerItem, UserDrawerItem, SprintDrawerItem } from './DrawerItem';
-import { useAuth } from 'src/utils/useAuthHook';
-import { firestore, auth } from 'firebase';
+import { AuthContext } from '../context/auth';
 
 const styles: { [key: string]: React.CSSProperties } = {
   drawer: {
@@ -87,7 +87,7 @@ const AppDrawerMenuList = (props: {
 };
 
 const AppDrawerMenu = () => {
-  const { user } = useAuth(auth(), firestore());
+  const { user } = React.useContext(AuthContext);
 
   return (
     <List style={styles.drawer}>

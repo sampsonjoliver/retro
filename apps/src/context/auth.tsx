@@ -1,20 +1,23 @@
-import { useState, useEffect } from 'react';
+import * as React from 'react';
 import { auth, firestore } from 'firebase';
 
-type AuthStateHook = {
+export type AuthStateHook = {
   isLoading: boolean;
   user: (firebase.User & UserInfo) | null;
 };
 
 let cachedUser: (firebase.User & UserInfo) | null = null;
 
-const useAuth = (fbAuth: auth.Auth, fbFirestore: firestore.Firestore) => {
-  const [authState, setState] = useState<AuthStateHook>({
+export const useAuth = (
+  fbAuth: auth.Auth,
+  fbFirestore: firestore.Firestore
+) => {
+  const [authState, setState] = React.useState<AuthStateHook>({
     isLoading: true,
     user: cachedUser
   });
 
-  useEffect(
+  React.useEffect(
     () => {
       let userInfoUnsub: null | (() => void) = null;
 
@@ -54,4 +57,17 @@ const useAuth = (fbAuth: auth.Auth, fbFirestore: firestore.Firestore) => {
   return authState;
 };
 
-export { useAuth };
+export const AuthContext = React.createContext<AuthStateHook>({
+  isLoading: false,
+  user: null
+});
+
+export const AuthProvider: React.StatelessComponent = props => {
+  const authData = useAuth(auth(), firestore());
+
+  return (
+    <AuthContext.Provider value={authData}>
+      {props.children}
+    </AuthContext.Provider>
+  );
+};
